@@ -8,7 +8,7 @@ package searchRT.utils;
 import java.io.* ;
 import java.util.Hashtable ;
 /**
- *
+ * 
  * @author Frank
  * uses a log file IndexFilesApp.txt to build a hash table.
  * Estimated size for hashtable will be 100K entries+
