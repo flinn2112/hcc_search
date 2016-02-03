@@ -9,6 +9,7 @@ import hcc_search.config.IConfigProcessor;
 import hcc_search.hResult;
 import hcc_search.hcc_utils;
 import hcc_search.logger.*;
+import searchRT.utils.* ;
 
 import hcc_search.myClassLoader;
 import org.apache.lucene.analysis.Analyzer;
@@ -62,6 +63,7 @@ public class IndexFilesApp implements IConfigProcessor{
     static objectLogger m_ObjectLog = null ;
     static objectLogger m_DupLog = null ;
     static simpleLogger m_FileListLog = null ;
+    static simpleLogger m_FileExcludeLog = null ;
     static MD5DB  m_MD5DB  ;
   public IndexFilesApp() {
       m_VFiles = new Vector<String>();
@@ -143,6 +145,8 @@ public class IndexFilesApp implements IConfigProcessor{
                                                                                                      );
    IndexFilesApp.m_FileListLog = new simpleLogger("FileList.txt", System.getProperty("user.dir") + File.separator + "logs", bAppendFiles);
    
+   IndexFilesApp.m_FileExcludeLog = new simpleLogger("FileExcludeList.txt", System.getProperty("user.dir") + File.separator + "logs", bAppendFiles);
+   
    
    
     
@@ -164,23 +168,18 @@ public class IndexFilesApp implements IConfigProcessor{
     }
     
     try{  //compile accepted extension table 
-        hcc_utils.ht_build(strConfigPath + File.separator + "includeExt.txt");
+        hcc_utils.ht_build(strCurrFile);
       }catch(IOException ex){
           return ;
-     }
-   strCurrFile  = strConfigPath + File.separator + "excludeExt.txt" ;
-   System.out.println("includeExt [ " + strCurrFile + " ]") ;
-   if( false == hcc_utils.checkPath(strCurrFile)){
-    System.err.println("Path [ " + strCurrFile + " ] does not exist - check argument please.") ;
-    //this is not critical
     }
-   else{
-       try{  //compile accepted extension table 
-        hcc_utils.ht_build(strConfigPath + File.separator + "excludeExt.txt");
-      }catch(IOException ex){
-          return ;
-     }   
-   }
+   
+   
+   try{
+       excludedFiles.ht_build(strConfigPath + File.separator + "excludeFiles.txt") ;
+    }
+    catch(Exception ex){
+      //non lethal
+    }
     
     
     
@@ -324,7 +323,7 @@ public class IndexFilesApp implements IConfigProcessor{
   }
  
   //objectname can be a filename or dir
-  public void collectFiles(String strObjectName, Hashtable htAlreadyProcessed){
+  public void collectFiles(String strObjectName, Hashtable htAlreadyProcessed, Hashtable htExcludedFiles){
       String strFilename = null ;
       String strPath     = null ;
       String strExt      = null ;
@@ -339,7 +338,7 @@ public class IndexFilesApp implements IConfigProcessor{
                     System.out.println("Directory " + file.getName() + " will be collected.");
           for (int i = 0; i < files.length; i++) {  
               {
-                collectFiles(file.getAbsolutePath() + "/" + files[i].getName(), IndexFilesApp.m_htFiles) ;
+                collectFiles(file.getAbsolutePath() + File.separator + files[i].getName(), htAlreadyProcessed, htExcludedFiles) ;
               }
             }  //files != null        
         }
@@ -355,8 +354,7 @@ public class IndexFilesApp implements IConfigProcessor{
         }
         //collectFiles(file.getName()) ;
       //  
-      strExt = hcc_utils.getExtension(strObjectName) ;  //only add certain types
-      
+      strExt = hcc_utils.getExtension(strObjectName) ;  //only add certain types      
       if( null != strExt && true == hcc_utils.isContained(strExt) ){ 
           if( null != htAlreadyProcessed ){ //delta requested - check if not already processed
              if( null != htAlreadyProcessed.get(strObjectName) ){ //already IN
@@ -365,6 +363,13 @@ public class IndexFilesApp implements IConfigProcessor{
                  return ;
              }
           }
+       
+         if( true == excludedFiles.isContained(strObjectName) ){
+             IndexFilesApp.m_FileExcludeLog.log(strObjectName) ;
+             return ;
+         }
+          
+          
         this.m_VFiles.add(strObjectName) ;
         IndexFilesApp.m_FileListLog.log(strObjectName) ;
       }
@@ -379,7 +384,7 @@ public class IndexFilesApp implements IConfigProcessor{
       }
       
       if(strCfgType.equals("dir")){
-          this.collectFiles(strLine, IndexFilesApp.m_htFiles  );         
+          this.collectFiles(strLine, IndexFilesApp.m_htFiles,  excludedFiles.sHT_Excluded  );         
       }
       
       if(strCfgType.equals("cfg")){
