@@ -1,0 +1,67 @@
+07.03.2015 19:24:54;index.jsp.log - mime.;path: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt
+07.03.2015 19:24:54;index.jsp.log - mime.;ext: doc
+07.03.2015 19:24:54;index.jsp.log - mime.;path: Creating HashTable<br>Opening file: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt<br>doc;application/msword
+doc<br>
+07.03.2015 19:24:54;index.jsp.log - mime.;path: Creating HashTable<br>Opening file: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt<br>doc;application/msword
+doc<br>dot;application/msword
+dot<br>
+07.03.2015 19:24:54;index.jsp.log - mime.;path: Creating HashTable<br>Opening file: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt<br>doc;application/msword
+doc<br>dot;application/msword
+dot<br>xls;application/vnd.ms-excel
+xls<br>
+07.03.2015 19:24:54;index.jsp.log - mime.;path: Creating HashTable<br>Opening file: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt<br>doc;application/msword
+doc<br>dot;application/msword
+dot<br>xls;application/vnd.ms-excel
+xls<br>xlsx;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+xlsx<br>
+07.03.2015 19:24:54;index.jsp.log - mime.;path: Creating HashTable<br>Opening file: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt<br>doc;application/msword
+doc<br>dot;application/msword
+dot<br>xls;application/vnd.ms-excel
+xls<br>xlsx;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+xlsx<br>xla;application/vnd.ms-excel
+xla<br>
+07.03.2015 19:24:54;index.jsp.log - mime.;path: Creating HashTable<br>Opening file: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt<br>doc;application/msword
+doc<br>dot;application/msword
+dot<br>xls;application/vnd.ms-excel
+xls<br>xlsx;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+xlsx<br>xla;application/vnd.ms-excel
+xla<br>xlt;application/vnd.ms-excel
+xlt<br>
+07.03.2015 19:30:02;index.jsp.log - mime.;path: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt
+07.03.2015 19:30:02;index.jsp.log - mime.;ext: doc
+07.03.2015 19:30:02;index.jsp.log - mime.;path: doc;application/msword
+doc<br>
+07.03.2015 19:30:02;index.jsp.log - mime.;path: dot;application/msword
+dot<br>
+07.03.2015 19:30:02;index.jsp.log - mime.;path: xls;application/vnd.ms-excel
+xls<br>
+07.03.2015 19:30:02;index.jsp.log - mime.;path: xlsx;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+xlsx<br>
+07.03.2015 19:30:02;index.jsp.log - mime.;path: xla;application/vnd.ms-excel
+xla<br>
+07.03.2015 19:30:02;index.jsp.log - mime.;path: xlt;application/vnd.ms-excel
+xlt<br>
+07.03.2015 19:30:37;index.jsp.log - mime.;path: C:\Program Files (x86)\Apache Software Foundation\Tomcat 7.0\webapps\hcc_search_jsp\config\mimemap.txt
+07.03.2015 19:30:37;index.jsp.log - mime.;ext: doc
+07.03.2015 19:30:38;index.jsp.log - mime.;path: doc;application/msword
+doc<br>
+07.03.2015 19:30:38;index.jsp.log - mime.;path: dot;application/msword
+dot<br>
+07.03.2015 19:30:38;index.jsp.log - mime.;path: xls;application/vnd.ms-excel
+xls<br>
+07.03.2015 19:30:38;index.jsp.log - mime.;path: xlsx;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+xlsx<br>
+07.03.2015 19:30:38;index.jsp.log - mime.;path: xla;application/vnd.ms-excel
+xla<br>
+07.03.2015 19:30:38;index.jsp.log - mime.;path: xlt;application/vnd.ms-excel
+xlt<br>
+31.10.2015 18:22:38;index.jsp.log - query.;Index: d:\SharedDownloads\Projekte\hcc\hcc_search\index
+31.10.2015 18:22:39;index.jsp.log - query.;Field: contents
+31.10.2015 18:29:41;index.jsp.log - query.;Index: d:\SharedDownloads\Projekte\hcc\hcc_search\index
+31.10.2015 18:29:42;index.jsp.log - query.;Field: contents
+31.10.2015 18:31:24;index.jsp.log - query.;Index: d:\SharedDownloads\Projekte\hcc\hcc_search\index
+31.10.2015 18:31:24;index.jsp.log - query.;Field: contents
+31.10.2015 18:36:12;index.jsp.log - query.;Index: d:\SharedDownloads\Projekte\hcc\hcc_search\index
+31.10.2015 18:36:12;index.jsp.log - query.;Field: contents
+03.02.2016 18:01:14;index.jsp.log - query.;Index: d:\SharedDownloads\Projekte\hcc\hcc_search\index
+03.02.2016 18:01:14;index.jsp.log - query.;Field: contents

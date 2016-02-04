@@ -1,0 +1,18 @@
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js;03.02.2016 20:53:23;FILE;12950;24. Juni 2013;7bb93fe3bf7b0127d51880fae1dc46f4;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\10005303558_1_Schrb. AG Br. 15.1.15.pdf;03.02.2016 20:53:23;FILE;87915;22. Februar 2015;36eea4263bdb434c25dabe7d358e0288;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\14032012104736164.pdf;03.02.2016 20:53:24;FILE;14652918;1. August 2012;df27d6f81c75da851977df29218a31f2;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14.pdf;03.02.2016 20:53:25;FILE;17677897;10. Oktober 2010;c3902b89e9c0d0fff1a60352c4e6a46c;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1422.pdf;03.02.2016 20:53:31;FILE;20026034;1. Dezember 2014;d291c40d514aa5621405ec741916440d;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1423.pdf;03.02.2016 21:07:12;FILE;21580444;1. Dezember 2014;fd24403909f1483f4b4212d7f0c27ff6;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1424.pdf;03.02.2016 21:07:16;FILE;18440043;1. Dezember 2014;5dccf4976b42f8dbebe7002407059f0;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1425.pdf;03.02.2016 21:07:20;FILE;22167800;1. Dezember 2014;3a1c653c7da78e6280a1249ffb0fa27c;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1426.pdf;03.02.2016 21:07:22;FILE;18114867;1. Dezember 2014;a9ee176eceaa5c1f543093264ab21029;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search - Kopie.html;03.02.2016 21:07:22;FILE;1135;5. März 2011;33d73f7626722a3c67cf46b2ce1a17a2;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\RE_MAYER_CONTAINER_2012.pdf;03.02.2016 21:07:25;FILE;4275467;23. August 2012;c0f5977a09664b20c8329af4fe1c930f;
+D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\zusatzprogrammierung_ishmed.pdf;03.02.2016 21:07:26;FILE;15464062;21. Dezember 2010;ec5b3cf37243402c38d462af64ce79c8;
+D:\SharedDownloads\Projekte\hcc\hcc_search\config\excludeExt.txt;03.02.2016 21:07:26;FILE;200;3. Februar 2016;9702f6d37234c93230b32fc4eb703c7c;
+D:\SharedDownloads\Projekte\hcc\hcc_search\config\excludeFiles.txt;03.02.2016 21:07:26;FILE;12;3. Februar 2016;7e2b5b5c3d5e13d57eeba423b3b6eeff;
+D:\SharedDownloads\Projekte\hcc\hcc_search\config\includeExt.txt;03.02.2016 21:07:26;FILE;163;6. März 2012;ba6fee4659ba538da44d4de0c9c1b2b2;
+D:\SharedDownloads\Projekte\hcc\hcc_search\config\mimemap.txt;03.02.2016 21:07:26;FILE;14533;17. Oktober 2012;4d11a7b330984b65ae8a0ea916dc58d0;
+D:\SharedDownloads\Projekte\hcc\hcc_search\config\server.xml;03.02.2016 21:07:26;FILE;6613;1. Oktober 2012;2a90fc04fa0962a3ec6c82be0199b3bc;
+D:\SharedDownloads\Projekte\hcc\hcc_search\config\tomcat-users.xml;03.02.2016 21:07:26;FILE;1748;14. Oktober 2012;a1d28a26f418acf21d35ebef022def9f;

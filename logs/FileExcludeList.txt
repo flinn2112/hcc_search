@@ -1,0 +1,4 @@
+D:\SharedDownloads\Projekte\hcc\hcc_search\logs\duplicates.txt
+D:\SharedDownloads\Projekte\hcc\hcc_search\logs\FileExcludeList.txt
+D:\SharedDownloads\Projekte\hcc\hcc_search\logs\FileList.txt
+D:\SharedDownloads\Projekte\hcc\hcc_search\logs\IndexFilesApp.txt
