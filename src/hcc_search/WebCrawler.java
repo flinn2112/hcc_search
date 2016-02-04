@@ -498,7 +498,7 @@ if( numberSearched == 40 ){
                 //there might also be some trailing stuff, text/html;charset UTF-8 - this needs to be replaced
        //!!!functioniert nicht!!! keine Ersetzung        
                 
-                Pattern p = Pattern.compile("[^a-zA-Z].*");
+                Pattern p = Pattern.compile("[^a-zA-Z].*"); 
                 // get a matcher object
                 Matcher m = p.matcher(strType);
                 strType = m.replaceAll("");
