@@ -493,7 +493,7 @@ if( numberSearched == 40 ){
                     continue ;
                 }
                 */
-               strType = strType.trim() ;
+                strType = strType.trim() ; 
                 strType = strType.replaceFirst(".*/", "") ;  //need only part after slash
                 //there might also be some trailing stuff, text/html;charset UTF-8 - this needs to be replaced
        //!!!functioniert nicht!!! keine Ersetzung        
