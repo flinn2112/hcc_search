@@ -702,6 +702,7 @@ class dextorT extends Thread{
         }
         System.out.println("closeDex: closing... ");
         dextorT.m_Indexer.closeIndex();
+        System.out.println("...Index closed");
         return true ;
     }
     

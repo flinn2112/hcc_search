@@ -84,12 +84,15 @@ public class Indexer {
     }
     
     public boolean closeIndex(){
-      System.out.println("Indexer::closeIndex: closing.... ");
-      
-      
-      if( null == this.m_idxWriter ) return false ;
-      
+      System.out.println("Indexer::closeIndex: closing.... ");      
+      if( null == this.m_idxWriter ) {
+        System.out.println("Error! idxWriter is null. Cannot complete operation ");     
+        return false ;
+      }
       try{         
+          System.out.println("Indexer::closeIndex: calling commit.... ");   
+          this.m_idxWriter.commit();
+          System.out.println("Indexer::closeIndex: changes committed. ");
           this.m_idxWriter.close();  
           Date end = new Date();
           //System.out.println(end.getTime() - start.getTime() + " total milliseconds");
