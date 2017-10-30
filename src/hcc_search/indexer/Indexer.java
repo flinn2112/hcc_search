@@ -96,10 +96,15 @@ public class Indexer {
           this.m_idxWriter.close();  
           Date end = new Date();
           //System.out.println(end.getTime() - start.getTime() + " total milliseconds");
-        } catch (IOException e) {
+        }
+      catch(org.apache.lucene.store.AlreadyClosedException eAC){
+          System.out.println(" caught a " + eAC.getClass() +
+           "\n with message: " + eAC.getMessage());
+      }  catch (IOException e) {
           System.out.println(" caught a " + e.getClass() +
            "\n with message: " + e.getMessage());
         }
+   
         return true ;
     }
     
