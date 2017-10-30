@@ -5,8 +5,10 @@
 package hcc_search.result; 
 import hcc_search.hcc_search_ExtendedAttributes;
 import hcc_search.indexer.IndexData;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 /**
  *
  * @author frankkempf
@@ -15,18 +17,25 @@ public class searchResultHTML implements searchResultOut{
     
     
     private boolean  m_bGenLocalPath ; //Controls  generation of links (true = file:\\
+    private String   m_strPreferredHost ; //result will be served by a local server(security)
     private String   m_strClientPrefs ;
     public searchResultHTML(){
         m_bGenLocalPath = false ;
         
     }
     public searchResultHTML(String strClientPrefs){
-        m_bGenLocalPath = false ;
+        m_bGenLocalPath    = false ;
+        m_strPreferredHost = "" ;  //yes empty not null
         if(null == strClientPrefs){
             return;
         }
         m_strClientPrefs = strClientPrefs ;
-        m_bGenLocalPath = strClientPrefs.contains("local") ;
+        m_bGenLocalPath = strClientPrefs.contains("useFile") ; //actually this will not work since browser do not support the file:/// much
+        if(!m_bGenLocalPath){//no local path found maybe a preferred server
+            if( strClientPrefs.startsWith("http")){
+                m_strPreferredHost = strClientPrefs ; 
+            }
+        }
     }
     
     
@@ -36,21 +45,25 @@ public class searchResultHTML implements searchResultOut{
         String strRet = null ;
         URL oURL = null ;
         StringBuilder sb = new StringBuilder() ;
-        
+        try{
+            strFilename = URLEncoder.encode( strFilename, "UTF-8") ;
+        }
+        catch(UnsupportedEncodingException ex){
+        }
         //localpath? - when files are stored on the local harddrive
         if( true == m_bGenLocalPath){
-            
-            
-            strRet =  "<p class=\"search_result_p\">"
-                + "<a href=\"file:///" 
-                + strFilename + "\" target=\"_blank\">" 
-                + strTitle +  "</a>\n"
-                + "&nbsp;&nbsp;&nbsp;<small class=\"lastModified\">" + strLastModified +  "</small></p>\n"
-                + "<p class=\"searchResultFileDetails\">Local:" + strFilename + "</p>\n" ;
+            sb.append("<p class=\"search_result_p\">" );
+            sb.append("<a href=\"file:///" );
+            sb.append( strFilename + "\" target=\"_blank\">" ); 
+            sb.append(strTitle +  "</a>\n" );
+            sb.append("&nbsp;&nbsp;&nbsp;<small class=\"lastModified\">" + strLastModified +  "</small></p>\n" );
+            sb.append("<p class=\"searchResultFileDetails\">Local:" + strFilename + "</p>\n" );
         }
         else{
                 sb.append( "<p class=\"search_result_p\">" ) ;
-                sb.append(  "<a href=\"/hcc_search_jsp/getContentSrvlt?fullpath=" ) ;
+                sb.append( "<a href=\"");
+                sb.append( m_strPreferredHost ) ;  //1.8.1.4
+                sb.append( "/hcc_search_jsp/getContentSrvlt?fullpath=" ) ;
                 sb.append(  strFilename + "\" target=\"_blank\">" ) ;
                 sb.append(  strTitle +  "</a>\n" ) ;
                 sb.append(  "&nbsp;&nbsp;&nbsp;<small class=\"lastModified\">" + strLastModified +  "</small></p>\n" ) ;
