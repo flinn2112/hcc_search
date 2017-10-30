@@ -78,7 +78,7 @@ public class customSearchCtrl {
         java.nio.file.Path nPath = Paths.get(so.m_strIndexDir) ;//FileSystems.getDefault().getPath(so.m_strIndexDir);
         FSDirectory fsDir = FSDirectory.open(nPath);
         org.apache.lucene.index.DirectoryReader  ireader = null ;
-        fileLogger fLog = new fileLogger("customSearch.java", "d:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\customSearchCtrl.log" );         
+        fileLogger fLog = new fileLogger("customSearch.java", ".\\customSearchCtrl.log" );         
         fLog.log("cs.search2", "Starting", 0) ;
         fLog.log("cs.search2", "CheckPoint1", 0) ; 
         
@@ -161,8 +161,7 @@ public class customSearchCtrl {
   
   //New with object return
   public static sResult  doPagingSearch2( IndexSearcher searcher, Query query, hcc_search_opts so,
-                                     int hitsPerPage,   searchResultOut rsOut) throws IOException {
- 
+                                     int hitsPerPage,   searchResultOut rsOut) throws IOException { 
     // Collect enough docs to show 5 pages
     TopDocs results = searcher.search(query, 5 * hitsPerPage);
     ScoreDoc[] hits = results.scoreDocs;
@@ -227,12 +226,12 @@ public class customSearchCtrl {
           //is it a URL?
           strURL = doc.get("url") ; //can be null
           
-          
+      
           if( null != strURL ){  //strURL bedeutet, dass es sich um eine WebSite Search handelt, bei files ist das nicht gesetzt.
               //strShortText = doc.get("shorttext");
               //nur experimentell: wenn WEB, dann Kurztext aus Content bilden.
               
-              
+    
               //query.extractTerms(lTerms) ;
               
               strTmp = doc.get("contents") ;
@@ -246,16 +245,23 @@ public class customSearchCtrl {
               }
               //sb.append("URL IS SET calling outURL");
               strURL = strURL.replaceFirst("url:/i", "") ;
-              sb.append(rsOut.outURL(strTitle, strShortText, strURL)) ;            
+              
+              sb.append(rsOut.outURL(strTitle, strShortText, strURL)) ;       
+              //sb.append(rsOut.outURL(strTitle, "das ist der URL Branch", "???")) ;
           }else{ //file
               //sb.append("URL NOT SET");
               //Server Path substitution active?
               //then replace <DRIVELETTER>: with subst
               if( null != so.m_strSubstDriveLetter ){
-                  String pattern = "([a-z]:)";
+                  String pattern = "([A-Za-z]:)";
                   path = path.replaceAll(pattern, so.m_strSubstDriveLetter) ;
+                  //strTitle = "Found SUBST " +  so.m_strSubstDriveLetter + " path: " + path;
+              }else{ //1.8.2.16 - bugs bounty
+                  //strTitle = "NO SUBST" ;
               }
+              
               sb.append(rsOut.out( strTitle, path, lastMod, ea)) ;
+              //sb.append(rsOut.outURL(strTitle, "das ist der FILE Branch", "!!!")) ;
           }
         
       } //for start end
