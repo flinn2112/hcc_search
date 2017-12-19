@@ -109,7 +109,7 @@ public class hcc_search_Bean implements Serializable, IConfigProcessor {
        customSearchCtrl csc  = null  ;
        String strResult     = null ;
        sResult oResult      = null ;        
-       csc = new customSearchCtrl() ;
+       csc = new customSearchCtrl() ; 
        try{
            oResult = csc.search2(so, new searchResultHTML(strClientPref)) ;
        }catch(Exception ex){          
