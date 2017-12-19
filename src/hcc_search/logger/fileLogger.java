@@ -118,6 +118,7 @@ public class fileLogger implements ILogger {
     public static String md5(String strContent){   
         MessageDigest m = null ;
         String strRet   = null ;
+        /*
         try{
             m = MessageDigest.getInstance("MD5");
             m.update(strContent.getBytes(),0,strContent.length());
@@ -125,8 +126,10 @@ public class fileLogger implements ILogger {
         }catch(java.security.NoSuchAlgorithmException ex){
            strRet = "" ;
         }
+        */
+        Integer iHash = strContent.hashCode() ;
         
-        return strRet ;
+        return iHash.toString() ;
     }
   
 }

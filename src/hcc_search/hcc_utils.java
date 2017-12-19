@@ -412,7 +412,12 @@ public class hcc_utils {
 
         try{             
              while ((strTmp = br.readLine()) != null) {
-                   cp.processLine(strTmp, strCfgType);
+                  if(strTmp.startsWith("#")){ //a comment line
+                       
+                    }else{
+                      cp.processLine(strTmp, strCfgType);
+                  }
+                   
              }
              br.close();
              fis.close();

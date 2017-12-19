@@ -65,6 +65,7 @@ public class IndexFilesApp implements IConfigProcessor{
     static simpleLogger m_FileListLog = null ;
     static simpleLogger m_FileExcludeLog = null ;
     static MD5DB  m_MD5DB  ;
+    
   public IndexFilesApp() {
       m_VFiles = new Vector<String>();
   }
@@ -78,10 +79,9 @@ public class IndexFilesApp implements IConfigProcessor{
     String strIndexPath   = null ;
     String strDocPath     = null ;
     String strConfigPath  = null ;
-    boolean bAppendFiles = false ;
-    
+    boolean bAppendFiles = false ;    
     boolean bCreateIndex   = false ;
-    
+    stateMonitor oStateMon = new stateMonitor( );
     
     Vector<String> vFiles = null ;
     int iMaxDocs = 10 ;
@@ -89,6 +89,7 @@ public class IndexFilesApp implements IConfigProcessor{
     IndexFilesApp ifa = new IndexFilesApp() ;
     Vector vTmp = new Vector() ;
     String strCurrFile  = null ;
+    //Create a map from all indexed files(these are logged in IndexFilesApp.txt).
     m_MD5DB = new MD5DB(System.getProperty("user.dir") + File.separator + "logs" + File.separator + "IndexFilesApp.txt") ;
         /*
         ("D:" + File.separator + "SharedDownloads" + File.separator 
@@ -157,13 +158,13 @@ public class IndexFilesApp implements IConfigProcessor{
    System.out.println("Config Path was set to [" + strConfigPath + "]") ;
    
    if( false == hcc_utils.checkPath(strConfigPath)){
-    System.err.println("Path [ " + strConfigPath + " ] does not exist - check argument please.") ;
+    System.out.println("Path [ " + strConfigPath + " ] does not exist - check argument please.") ;
     return ;
     }
    strCurrFile  = strConfigPath + File.separator + "includeExt.txt" ;
    System.out.println("includeExt [ " + strCurrFile + " ]") ;
    if( false == hcc_utils.checkPath(strCurrFile)){
-    System.err.println("Path [ " + strCurrFile + " ] does not exist - check argument please.") ;
+    System.out.println("Path [ " + strCurrFile + " ] does not exist - check argument please.") ;
     return ;
     }
     
@@ -188,7 +189,7 @@ public class IndexFilesApp implements IConfigProcessor{
     strCurrFile = strConfigPath + File.separator + "settings.cfg";
     System.out.println("settings: [ " + strCurrFile + " ]") ;
     if( false == hcc_utils.checkPath(strCurrFile)){
-    System.err.println("Path [ " + strCurrFile + " ] does not exist - check argument please.") ;
+    System.out.println("Path [ " + strCurrFile + " ] does not exist - check argument please.") ;
     return ;
     }
     
@@ -201,7 +202,7 @@ public class IndexFilesApp implements IConfigProcessor{
     IndexFilesApp.m_iTraceLevel = Integer.parseInt( (String) IndexFilesApp.m_htConfig.get("trace") );
     System.out.println("Index Directory [ " + strIndexPath + " ]") ;
     if( false == hcc_utils.checkPath(strIndexPath)){
-        System.err.println("Index Directory [ " + strIndexPath + " ] does not exist - check path please.") ;
+        System.out.println("Index Directory [ " + strIndexPath + " ] does not exist - check path please.") ;
         return ;
     }
     
@@ -228,7 +229,7 @@ public class IndexFilesApp implements IConfigProcessor{
         //System.out.println("Vector Element "+i+" :"+a.m_VFiles.get(i));
         //processFile(writer, new File(ifa.m_VFiles.get(i).toString())) ;
         //last parameter is close Index -> last thread should close
-        dT = new dextorT( strIndexPath, false, 5000L, (i == ifa.m_VFiles.size() - 1 ) ) ;
+        dT = new dextorT( strIndexPath, false, 5000L, (i == ifa.m_VFiles.size() - 1 ), oStateMon ) ; //Arg #3: closes Index when loop reached vector size
         
         vTmp.add(ifa.m_VFiles.get(i)) ;  //copy over
         //if(  i > 0 && vTmp.size() % iMaxDocs == 0 ){
@@ -240,9 +241,9 @@ public class IndexFilesApp implements IConfigProcessor{
                
            System.out.println("Processing [" + ifa.m_VFiles.get(i) + "] [" 
                + Integer.toString(i+1) +  "/" + ifa.m_VFiles.size() + "]" ) ;
-           if(  0 == i%10000 ){
+           if( i> 0 && i%10000 == 0 ){
                System.out.println("----------->  Reached next batch mark [" + Integer.toString(i) + "] reorg index...");
-               //dT.reorg() ;
+               dT.reorg() ; //12/2017 - wieder aktiviert
            }
            
            
@@ -252,15 +253,22 @@ public class IndexFilesApp implements IConfigProcessor{
            dT.start() ; //start thread
            //dT.processFile(dextorT.m_Indexer.m_idxWriter, new File(ifa.m_VFiles.get(i)));
            try{
-                System.out.println("Waiting for thread [" + dT.getName() + "]");
+                System.out.println("IndexFilesApp Waiting for thread [" + dT.getName() + "]");
                 dT.join(m_lThreadTimeout);
-                if( dT.isAlive()){
-                    iTest = 2112 ;
+                if( dT.isAlive() ){ //update wird nicht gestoppt
+                    iTest = 2112 ;                    
+                    
+                                     
                     
                     try{
+                        
                         dT.kill() ;
+                        System.out.println("<----------------  IndexFilesApp  Thread Interrupt: kill called..");
+                        //dT.closeDex(); //close all stuff so it would be re-opened by the next thread.
                     }
                     catch(java.nio.channels.ClosedByInterruptException exC){ 
+                        System.out.println("<----------------  IndexFilesApp  ClosedByInterruptException: closing index.");
+                        //dT.closeDex();                        
                         continue ;
                     }
                     
@@ -269,11 +277,11 @@ public class IndexFilesApp implements IConfigProcessor{
                 else{
                     System.out.println("Thread [" + dT.getName() + "] finished.");
                 }
-                dT.m_VFiles.removeAllElements();
+                dT.m_VFiles.removeAllElements(); //clear the processing Vector of this thread
             }
             catch (java.lang.InterruptedException e){
                System.out.println("Thread interrupted [" + m_lThreadTimeout + "]");
-               dT.dumpStack();
+               //dT.dumpStack();
             }
            finally{
                vTmp.removeAllElements();
@@ -282,8 +290,11 @@ public class IndexFilesApp implements IConfigProcessor{
            
         //}
     }
-    if( null != dT )
-        dT.closeDex();  //At end the index must be closed.
+    if( null != dT ){
+        System.out.println("<----------------  IndexFilesApp  Main closing index.");
+        dT.closeDex();
+    }
+          //At end the index must be closed.
     
     //maybe there is a remainder.
  /*
@@ -335,7 +346,7 @@ public class IndexFilesApp implements IConfigProcessor{
         // an IO error could occur
         if (files != null) {
               if( IndexFilesApp.m_iTraceLevel > 2)
-                    System.out.println("Directory " + file.getName() + " will be collected.");
+                    System.out.println("Directory " + file.getPath() + " will be collected.");
           for (int i = 0; i < files.length; i++) {  
               {
                 collectFiles(file.getAbsolutePath() + File.separator + files[i].getName(), htAlreadyProcessed, htExcludedFiles) ;
@@ -378,7 +389,7 @@ public class IndexFilesApp implements IConfigProcessor{
   public String processLine(String strLine, String strCfgType){
       String strNameValue[] = null ;
       System.out.println("processLine: " + strLine );
-      
+           
       if(strLine.startsWith("*")){
           return "*" ;
       }
@@ -415,80 +426,43 @@ public class IndexFilesApp implements IConfigProcessor{
   
   
   
-  static void indexFile(IndexWriter writer, File file,  int iMaxFileSizeMB, Long lTotalFiles, Long lCurrentFile)
+  static void indexFile(IndexWriter writer, hResult oResult,  int iMaxFileSizeMB, Long lTotalFiles, Long lCurrentFile)
         throws IOException {
         String strTitle = null ;
-        String strPath = null ;
-        String strExt = null ;
         String strTmp = null;
-        String strMD5 = null ;
-        String strClassName = null ;
+        
         String strID = null ;
         String pattern = "[[^a-z0-9A-Z]]";  //f. ID
         Integer iID ;
-        String strDate = new String("") ;
+        
         Field fDocField = null ; //Lucene attribute field
-        myClassLoader ccl = new myClassLoader(IndexFilesApp.m_iTraceLevel) ;
-        hResult   oResult = new hResult() ; //search Result object 
+        
         Document doc = null ;
-    // do not try to index files that cannot be read
-        if (false == file.canRead()) {
-          return ;
-        }
     
-     //it is a file - get extension and call extractor
-          
-         strExt = hcc_utils.getExtensionUpper(file) ;
-         if( null == strExt || 0 == strExt.length()  ){
-             return ;
-         }
          
-         if( false == hcc_utils.isContained(strExt)){
-             System.out.println("no file extension configured [" + file.getName() + "]" ) ;
-             return ;
-         }
-         
-         //compile classname
-         strClassName = "hcc_search." + strExt + "Extractor" ;
-         
-         
-         //do  we have such a class?
-         if( null == ccl.findClass(strClassName) ){
-          strClassName = "hcc_search.BINExtractor" ;
-         }
-         
-         
-         //try{
-             
-         //}catch(Exception ex){
-            //move on
-         //}
-         
-         try{
-                 //get content
-                 oResult = (hResult)ccl.invokeClassMethod(strClassName, "processDocument", file) ;
-                 if( null == oResult ){
-                     return ;
-                 }
+                 
+                 
                  //1.6.11 - delta processing
                  //even though it is tiresome to have read the file to decide wether to index it,
                  //it is necessary to get the MD5 and it will anyway accelerate the processing
                  //Es ist ein Unterschied, ob es ein Duplikat ist, oder einfach schonmal indiziert wurde.
                  //Das muss noch herausgearbeitet werden.
                 if( null != oResult  ){
-                    strMD5 =  fileLogger.md5( oResult.m_oPayLoad.toString() ) ;
+                    oResult.m_strHash =  fileLogger.md5( oResult.m_oPayLoad.toString() ) ;
                     
-                    switch(deltaMan.check( strMD5 )){ 
+                    switch(deltaMan.check( oResult.m_strHash )){ 
                         case deltaMan.IS_CONTAINED:
                             // no logging IndexFilesApp.m_DupLog.log(file, strMD5 );
+                            System.out.println("indexFile Skipped: deltaMan returned IS_CONTAINED [" + oResult.m_strFilename + "]" ) ;
                             return ;
                         case deltaMan.IS_DUP:
-                            IndexFilesApp.m_DupLog.log(file, strMD5 );
+                            IndexFilesApp.m_DupLog.log(oResult );
+                            System.out.println("indexFile Skipped: deltaMan returned IS_DUPLICATE [" + oResult.m_strFilename + "]" ) ;
                             return ;
                         default:
                             break ;
                     }                  
-                    deltaMan.discovered(strMD5, file.getName());  //enrich our map                    
+                    deltaMan.discovered(oResult.m_strHash, oResult.m_strFilename);  //enrich our map                    
                 }
                  
                  switch (oResult.m_eRetType){
@@ -505,21 +479,18 @@ public class IndexFilesApp implements IConfigProcessor{
                           doc.add(new Field("checksum", 
                                     strTmp,
                                     Field.Store.YES, Field.Index.ANALYZED));
-                          strTmp = String.valueOf(file.length() ) ;
+                          strTmp = String.valueOf(oResult.m_lFileLength ) ;
                           doc.add(new Field("filesize", 
                                     strTmp,
                                     Field.Store.YES, Field.Index.ANALYZED));
                           break ; 
-                     default:                         
+                     default:         
+                         System.out.println("indexFile Skipped: unknown Content Type [" + oResult.m_strFilename + "]" ) ;
                           return ; //nothing to do
                  }
                  oResult.m_iPayLoadLen = oResult.m_oPayLoad.toString().length() ; 
-            }
-            catch(Exception ex){
-                Throwable t = ex.getCause() ;
-                System.out.println("indexFile - Failed [" + ex.toString() + "]" ) ;
-                return ;
-            }
+            
+            
 
         try {   
 
@@ -529,19 +500,19 @@ public class IndexFilesApp implements IConfigProcessor{
           // or positional information:
           
          
-          strPath = file.getPath() ;
-          Field pathField = new Field("URN", strPath, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
+         
+          Field pathField = new Field("URN", oResult.m_strPath, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
 //          pathField.setIndexOptions(IndexOptions.DOCS_ONLY);
           doc.add(pathField);
           
-          fDocField = new Field("ID", strPath.replaceAll(pattern, "_") , Field.Store.YES, Field.Index.ANALYZED);
+          fDocField = new Field("ID", oResult.m_strPath.replaceAll(pattern, "_") , Field.Store.YES, Field.Index.ANALYZED);
      //     fDocField.setIndexOptions(IndexOptions.DOCS_ONLY);
           doc.add(fDocField); 
            
           
           
-          strDate = hcc_utils.getLastModifiedString(file) ;
-          Field dateField = new Field("date",  strDate, 
+          
+          Field dateField = new Field("date",  oResult.m_strLastModified, 
                                 Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
        //   dateField.setIndexOptions(IndexOptions.DOCS_ONLY);
           doc.add(dateField);
@@ -551,17 +522,17 @@ public class IndexFilesApp implements IConfigProcessor{
                strTmp = System.getenv("HOSTNAME") ;
           }
           if( null != strTmp && strTmp.length() > 0 ){
-              Field hostName = new Field("source", file.getPath(), Field.Store.YES, Field.Index.ANALYZED);
+              Field hostName = new Field("source", oResult.m_strPath, Field.Store.YES, Field.Index.ANALYZED);
             //  pathField.setIndexOptions(IndexOptions.DOCS_ONLY);
               doc.add(hostName);                     
           }
           
-          fDocField = new Field("doctype", strExt, Field.Store.YES, Field.Index.ANALYZED);
+          fDocField = new Field("doctype", oResult.m_strExt, Field.Store.YES, Field.Index.ANALYZED);
          // fDocField.setIndexOptions(IndexOptions.DOCS_ONLY);
           doc.add(fDocField);  
           
           //the Filename (without path) will be included as Title.
-          strTitle = file.getName() ;
+          strTitle = oResult.m_strFilename ;
           if(null != strTitle ){
             fDocField = new Field("title", strTitle, Field.Store.YES, Field.Index.ANALYZED);
            // fDocField.setIndexOptions(IndexOptions.DOCS_ONLY);
@@ -571,12 +542,11 @@ public class IndexFilesApp implements IConfigProcessor{
           //the Filename (without path) will be included as field, 
           //so users may search for parts of it (i.e. name:CV*).
           //Useful when searching for documents and remember parts of its name.
-          strPath = hcc_utils.getFilename(file.getPath()) ;
-          fDocField = new Field("filename", strPath, Field.Store.YES, Field.Index.ANALYZED);
+          fDocField = new Field("filename", oResult.m_strPath, Field.Store.YES, Field.Index.ANALYZED);
         //  fDocField.setIndexOptions(IndexOptions.DOCS_ONLY);
           doc.add(fDocField);  
           
-          fDocField = new Field("year", hcc_utils.getYear(file), Field.Store.YES, Field.Index.ANALYZED);
+          fDocField = new Field("year", oResult.m_strYear, Field.Store.YES, Field.Index.ANALYZED);
       //    fDocField.setIndexOptions(IndexOptions.DOCS_ONLY);
           doc.add(fDocField);  
           
@@ -587,9 +557,8 @@ public class IndexFilesApp implements IConfigProcessor{
           // year/month/day/hour/minutes/seconds, down the resolution you require.
           // For example the long value 2011021714 would mean
           // February 17, 2011, 2-3 PM.
-          Long lLastMod = file.lastModified() ;
           org.apache.lucene.document.LongField modifiedField = 
-                  new org.apache.lucene.document.LongField("lastModified", lLastMod, 
+                  new org.apache.lucene.document.LongField("lastModified", oResult.m_lLastModified, 
                                            org.apache.lucene.document.Field.Store.YES) ;
           doc.add(modifiedField);
   /*        
@@ -606,7 +575,7 @@ public class IndexFilesApp implements IConfigProcessor{
           if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
             // New index, so we just add the document (no old document can be there):
               if( IndexFilesApp.m_iTraceLevel > 2)
-                    System.out.println("adding file [" + file + "]");
+                    System.out.println("adding file [" + oResult.m_strFilename + "]");
                 try{
                     writer.addDocument(doc);
                 }catch (java.lang.OutOfMemoryError ex){                 
@@ -618,20 +587,24 @@ public class IndexFilesApp implements IConfigProcessor{
             // we use updateDocument instead to replace the old one matching the exact 
             // path, if present:
               if( IndexFilesApp.m_iTraceLevel > 2)   
-                System.out.println("updating " + file.getName());
-            writer.updateDocument(new Term("URN", file.getPath()), doc);
+                System.out.println("updating " + oResult.m_strFilename);
+            writer.updateDocument(new Term("URN", oResult.m_strPath), doc);
             if( IndexFilesApp.m_iTraceLevel > 2)   
-                System.out.println("done updating " + file);
+                System.out.println("done updating " + oResult.m_strFilename);
           }
-        } finally {
-            if( null != oResult ){
-                IndexFilesApp.m_ObjectLog.log(file, strMD5 );  
-            }              
-            else
-              IndexFilesApp.m_ObjectLog.log(file);
+         
+        } 
+         catch(Exception ex){
+             System.out.println("-----indexFile-----> !!!File [" + oResult.m_strFilename + "] crashed with exception: " + ex.toString());
+        }
+        
+        finally {            
+              IndexFilesApp.m_ObjectLog.log(oResult);
         }     
   }
 }
+
+
 
 class MD5DB extends Thread{
     private String m_strFilename = null ;
@@ -644,7 +617,7 @@ class MD5DB extends Thread{
             deltaMan.createDB(m_strFilename);
         }
         catch(Exception ex){
-            System.err.println("run::MD5DB error - " + ex.getMessage());
+            System.out.println("run::MD5DB error - " + ex.getMessage());
         }
     }
     
@@ -652,6 +625,39 @@ class MD5DB extends Thread{
         
        this.workDo() ;
       //if( true == m_bCloseIdxIndicator ) this.closeDex() ; //last thread should close
+    }
+}
+
+class stateMonitor{
+    public static final int LIMBO       =     0 ;  
+    public static final int EXTRACTING = 10000 ;  
+    public static final int DEXING     = 10001 ;  
+    private int m_iCurrentState = 0 ;
+    
+    public stateMonitor(){
+        this.m_iCurrentState = LIMBO ;
+    }
+    
+    public void setState(int iState){
+        this.m_iCurrentState = iState ;
+    }
+    public void setStateExtracting(){
+        this.m_iCurrentState = EXTRACTING ;
+    }
+    public void setStateIndexing(){
+        this.m_iCurrentState = DEXING ;
+    }
+     public void setStateLimbo(){
+        this.m_iCurrentState = LIMBO ;
+    }
+    public boolean isExtracting(){
+        return this.m_iCurrentState == EXTRACTING ;
+    }
+    public boolean isUpdating(){
+        return this.m_iCurrentState == DEXING ;
+    }
+    public boolean isLimbo(){
+        return this.m_iCurrentState == LIMBO ;
     }
 }
 
@@ -664,24 +670,23 @@ class dextorT extends Thread{
     public Vector          m_VFiles = null ;
     public static Long     m_lTotalFiles = 0L ;
     public static Long     m_lBatchFiles = 0L ;  //Current Number of files in batch
-    public static Long     m_lReorgAfter = 1000L ; //reorg index after processing a certain number of files
+    public static Long     m_lReorgAfter = 4096L ; //reorg index after processing a certain number of files
     public Long            m_lCurrentFile = 0L ;
     public static String   m_strPath = null ;
-    public boolean         m_bCloseIdxIndicator = false ;
-    
+    public boolean         m_bCloseIdxIndicator = false ;    
     public static Indexer  m_Indexer = null ;
-    
-  
-    
+    private stateMonitor   m_sMon    = null ;
     
     public dextorT( String strIndexPath, boolean bCreateIndex, 
-            Long lReorgAfterNumFiles, boolean bCloseDex){
+        Long lReorgAfterNumFiles, boolean bCloseDex, stateMonitor oSMon){
         m_VFiles       = null ; 
         m_strPath = strIndexPath ;
         m_bCloseIdxIndicator = bCloseDex ;
+        m_sMon = oSMon ;
         dextorT.m_lTotalFiles  = 0L ;
         dextorT.m_lReorgAfter = lReorgAfterNumFiles ;
         if( null == dextorT.m_Indexer ){  //Singleton
+            System.out.println("dextorT: !----------------> indexer --------   o p e n i n g... ");
             dextorT.m_Indexer  = new Indexer(strIndexPath,  bCreateIndex, IndexFilesApp.m_iTraceLevel );
         }
         
@@ -698,10 +703,12 @@ class dextorT extends Thread{
             //return false ;
         //}
         if( null == dextorT.m_Indexer ){
+            System.out.println("closeDex: !----------------> indexer is null - cannot close... ");
             return false ;
         }
         System.out.println("closeDex: closing... ");
         dextorT.m_Indexer.closeIndex();
+        dextorT.m_Indexer = null ;
         System.out.println("...Index closed");
         return true ;
     }
@@ -711,7 +718,10 @@ class dextorT extends Thread{
         this.closeDex();
         dextorT.m_Indexer = null ; //will cause a new creation on next run.
         //!!check if the create option true is really optimal and working.
-        dextorT.m_Indexer = new Indexer(m_strPath,  true, IndexFilesApp.m_iTraceLevel );
+        System.out.println("reorg: re-creating index. ");
+        dextorT.m_Indexer = new Indexer(m_strPath,  
+                                        false, //meaning: do append not create
+                                        IndexFilesApp.m_iTraceLevel );
         return true ;
     }
     
@@ -726,24 +736,64 @@ class dextorT extends Thread{
             this.processFiles() ;
         }
         catch(Exception ex){
-            System.err.println("run::processFiles error - " + ex.getMessage());
+            System.out.println("###############run::processFiles error - Exception occured! ############" + ex.getMessage());
+            
         }
       //if( true == m_bCloseIdxIndicator ) this.closeDex() ; //last thread should close
     }
     
-    public void kill() throws java.nio.channels.ClosedByInterruptException{      
-          System.err.println("dt::kill - this thread gets killed... ");
+    /*
+        Das gibt Schwierigkeiten mit dem Indexer - ein Interrupt kann den IO Channel zerstören,
+        dann kommt das ganze System durcheinander.
+        :If a thread is blocked in an I/O operation on an interruptible channel 
+        then another thread may invoke the blocked thread's interrupt method. 
+        This will cause the channel to be closed
+    */
+    public void kill() throws java.nio.channels.ClosedByInterruptException{
+        if(this.m_sMon.isExtracting() || this.m_sMon.isLimbo()){
           this.interrupt() ;
-          throw new java.nio.channels.ClosedByInterruptException() ;
+          System.out.println("--->!!!!!!!!!!!!!!!!!!     dt::kill - this thread gets killed... ");          
+        }else{
+            System.out.println("--->!!!!!!!!!!!!!!!!!!     dt::kill - !NOT IN EXTRACTING - cannot kill this thread... ");      
+        
+        }
+        
+        
+        
+        
+          //throw new java.nio.channels.ClosedByInterruptException() ; //?warum das?
     }
     
 
-    
-    public void processFile(IndexWriter w, File f){
+    /*
+        1.8.12.8 - split Operation int two parts:
+        1. Extract Text
+        2. Index
+        in order to support interruption of thread.
+    */
+    public void processFile(IndexWriter w, File f) throws Exception{
         //Thread customization
-        this.setName(f.getName());
+        hResult oResult = null ;
+        this.setName(f.getName()); //Thread's name
+        System.out.println("---------> Current Docs in Index. Total: [" + w.numDocs() + "] In RAM [" + w.numRamDocs() + "]") ;
         try{
-            IndexFilesApp.indexFile(w, f, 5, m_lTotalFiles, m_lCurrentFile);
+            m_sMon.setStateExtracting();
+            oResult =  oResult = dextorT.m_Indexer.extractText(f, m_lTotalFiles, m_lCurrentFile) ;
+            
+            if(oResult.m_iStatusCode != hResult.STATUS_OK){
+                return ;
+            }
+                
+            
+            if(this.isInterrupted()){  //1.8.12.8
+                //thread was killed - when calling indexFile then the whole process would crash.                
+                System.out.println("processFiles: Error this thread was interrupted. ");
+            }
+            else{
+                m_sMon.setStateIndexing();
+                IndexFilesApp.indexFile(w, oResult, 5, m_lTotalFiles, m_lCurrentFile);
+            }
+            m_sMon.setStateLimbo();
             /*
             dextorT.m_lTotalFiles++ ;
             dextorT.m_lBatchFiles++ ;
@@ -763,27 +813,27 @@ class dextorT extends Thread{
             
         }  
         catch(IOException ex){
-            
+            throw new IOException( ex.toString() ) ;
         }        
     }
     
-    public void processFiles() throws java.nio.channels.ClosedByInterruptException{    
+    public void processFiles() throws java.nio.channels.ClosedByInterruptException, Exception{    
         
         if( null == dextorT.m_Indexer.m_idxWriter ){ 
             System.out.println("processFiles: Error Indexer.m_idxWriter is null. ");
             return ;  //MORE HANDLING!!!
         }
         
-        
-        
-        for(int i=0;i<this.m_VFiles.size();i++)
-        {
+        for(int i=0;i<this.m_VFiles.size();i++){
             m_lCurrentFile++ ;
             if( IndexFilesApp.m_iTraceLevel > 2 )
                 System.out.println("Vector Element "+ i +" :" + this.m_VFiles.get(i));
-            processFile( m_Indexer.m_idxWriter, new File(this.m_VFiles.get(i).toString())) ;
+            try{
+                processFile( m_Indexer.m_idxWriter, new File(this.m_VFiles.get(i).toString()) ) ;
+            }catch( Exception ex){
+                throw ex ; 
+            }
         }
-        //m_Indexer.closeIndex( m_Indexer.m_idxWriter);
     }
  /*       
     public void processFiles(){    

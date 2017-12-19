@@ -1,0 +1,29 @@
+
+documents_dbg/ct1422.pdf
+*.pdf
+*.cfs
+*.fdx
+*.fdt
+*.fnm
+*.nvd
+*.nvm
+*.liv
+*.si
+index/_18_Lucene50_0.doc
+*.zip
+*.cfe
+*.pos
+*.tip
+*.tim
+dist/logs/bak/duplicates.txt
+dist/hcc_search.jar
+dist/dbg_night.txt
+dist/config/settings - Kopie.cfg
+*.scc
+documents_dbg/hcc_search - Kopie.html
+index/_1i_Lucene50_0.doc
+index/_25_Lucene50_0.doc
+index/_g_Lucene50_0.doc
+index/_x_Lucene50_0.doc
+index/segments_k
+*.tif

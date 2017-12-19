@@ -4,6 +4,7 @@
  */
 package hcc_search.logger;
 
+import hcc_search.hResult;
 import hcc_search.hcc_utils;
 import java.io.*;
 
@@ -67,6 +68,34 @@ public class objectLogger implements ILogger {
     }
     public void log(String strWho, String strWhat, int iSeverity){
         
+    }
+    
+    public void log(hResult oResult){
+        boolean bRet = false ;
+        StringBuilder sb = new StringBuilder() ;  
+        sb.append(oResult.m_strFilename) ;
+        sb.append(m_strDelimiter) ;
+        sb.append(hcc_utils.timestamp_now()) ;
+        sb.append(m_strDelimiter) ;
+        
+        
+        sb.append(oResult.m_strType) ;
+        
+        sb.append(m_strDelimiter) ;        
+        
+        sb.append(oResult.m_lFileLength) ;
+        sb.append(m_strDelimiter) ;
+        sb.append(oResult.m_strLastModified) ;
+        sb.append("\r\n") ; //need to have new Line
+        
+        try{
+            bRet = this.open(m_strName);
+            if(false == bRet) return ;
+            m_bwLog.write(sb.toString());
+            this.close();
+        } catch( IOException ex){
+           ;
+        }
     }
     
     public void log(File f){

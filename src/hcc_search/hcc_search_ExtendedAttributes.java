@@ -7,8 +7,9 @@ package hcc_search;
 /**
  *
  * @author hcc
+ * Extended attributes of stored objects.
  */ 
 public class hcc_search_ExtendedAttributes {
     public String m_strFilesize ;
-    public String m_strCheckSum ;
+    public String m_strCheckSum ;    
 }

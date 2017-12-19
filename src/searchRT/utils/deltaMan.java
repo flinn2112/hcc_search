@@ -15,31 +15,32 @@ import java.util.Hashtable ;
  */
 public class deltaMan { 
     static Hashtable m_htMD5 = null ;
-    static Hashtable m_htMD5New = null ;
+    //static Hashtable m_htMD5New = null ;
     
     public static final int IS_NEW = 0;
     public static final int IS_CONTAINED = 1;
     public static final int IS_DUP = 2;
     public static int check(String strMD5){ 
         
-        if( null != deltaMan.m_htMD5 && true ==  deltaMan.m_htMD5.containsKey(strMD5) ){
-            return deltaMan.IS_CONTAINED ;
-        }
-        if( null != deltaMan. m_htMD5New && true ==  deltaMan.m_htMD5New.containsKey(strMD5) ){
+     //erstmal weg - Fehlersuche 11/2017: Vermutung lag nahe, das die Duplikaterkennung den Index durcheinander bringt. - Hat sich aber nicht bestätigt. 
+     
+        if( null != deltaMan. m_htMD5 && true ==  deltaMan.m_htMD5.containsKey(strMD5) ){
             return  deltaMan.IS_DUP ;
         }
+     
         return deltaMan.IS_NEW ;  //not contained
     }
     
     public static void discovered(String strMD5, String strFilename){
-        if( null == deltaMan. m_htMD5New){
-                deltaMan. m_htMD5New = new Hashtable() ;              
+        if( null == deltaMan.m_htMD5){
+                deltaMan. m_htMD5 = new Hashtable() ;              
         }
-            deltaMan. m_htMD5New.put(strMD5, strFilename) ;        
+            deltaMan. m_htMD5.put(strMD5, strFilename) ;        
     }
     
     /*
-        Create a database from a log file.
+        Create a database from a log file that contains all files that were indexed.
+        The CheckSums can be found there.
         This is different, to the discovery of new MD5, - to detect duplicates
     
     */
@@ -54,7 +55,7 @@ public class deltaMan {
       FileInputStream fstream = null ;
       
       deltaMan.m_htMD5    = new Hashtable() ;
-      deltaMan.m_htMD5New = new Hashtable() ;
+     // deltaMan.m_htMD5New = new Hashtable() ;
   try{
        fstream = new FileInputStream(strFilename);
       // Get the object of DataInputStream

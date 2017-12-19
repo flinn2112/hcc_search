@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package hcc_search.indexer;
+package hcc_search.indexer; 
 
 import hcc_search.hResult;
 import hcc_search.hcc_utils;
