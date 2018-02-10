@@ -251,14 +251,18 @@ public class IndexFilesApp implements IConfigProcessor{
            
            //dT.setDaemon(true);
            dT.start() ; //start thread
-           //dT.processFile(dextorT.m_Indexer.m_idxWriter, new File(ifa.m_VFiles.get(i)));
+/*
+           try{
+                dT.processFile(dextorT.m_Indexer.m_idxWriter, new File(ifa.m_VFiles.get(i)));
+            }catch(Exception ex){
+
+            }
+*/
            try{
                 System.out.println("IndexFilesApp Waiting for thread [" + dT.getName() + "]");
                 dT.join(m_lThreadTimeout);
                 if( dT.isAlive() ){ //update wird nicht gestoppt
-                    iTest = 2112 ;                    
-                    
-                                     
+                    iTest = 2112 ;    
                     
                     try{
                         
@@ -775,12 +779,15 @@ class dextorT extends Thread{
         //Thread customization
         hResult oResult = null ;
         this.setName(f.getName()); //Thread's name
-        System.out.println("---------> Current Docs in Index. Total: [" + w.numDocs() + "] In RAM [" + w.numRamDocs() + "]") ;
+        System.out.println("<processFile> ---------> Current Docs in Index. Total: [" + w.numDocs() + "] In RAM [" + w.numRamDocs() + "]") ;
         try{
             m_sMon.setStateExtracting();
-            oResult =  oResult = dextorT.m_Indexer.extractText(f, m_lTotalFiles, m_lCurrentFile) ;
-            
+            //oResult =  oResult = dextorT.m_Indexer.extractText(f, m_lTotalFiles, m_lCurrentFile) ;
+//2018
+
+     oResult = dextorT.m_Indexer.extractTextTika(f,Integer.MAX_VALUE, m_lTotalFiles, m_lCurrentFile) ;            
             if(oResult.m_iStatusCode != hResult.STATUS_OK){
+                System.out.println("<processFile> ---------> SKIPPED. Status was [" + oResult.m_iStatusCode + "]") ;
                 return ;
             }
                 

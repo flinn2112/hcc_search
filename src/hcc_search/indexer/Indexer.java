@@ -6,8 +6,6 @@ package hcc_search.indexer;
 import hcc_search.hResult;
 import hcc_search.hcc_exception;
 import hcc_search.hcc_utils;
-import hcc_search.indexer.IndexField;
-import hcc_search.indexer.IndexData;
 import hcc_search.myClassLoader;
 import org.apache.lucene.analysis.Analyzer;
 //import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -24,13 +22,21 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import java.nio.file.Paths;
 
 import java.io.File;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date ;
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.io.TikaInputStream;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -210,6 +216,62 @@ public class Indexer {
         oResult.m_lFileLength = file.length() ;
         
         return oResult ;
+     }
+     /*
+        2018 Apache Tika Extractor
+     */
+      /*
+        2018 Apache Tika Extractor
+     */
+     
+     private static String parseUsingAutoDetect(String filename, int iLimit) throws Exception {
+        System.out.println("Handling using AutoDetectParser: [" + filename + "]");
+        TikaConfig         tikaConfig    = TikaConfig.getDefaultConfig();
+        AutoDetectParser parser = new AutoDetectParser(tikaConfig);
+        BodyContentHandler handler = new BodyContentHandler(iLimit);
+        Metadata           metadata      = new Metadata();
+        TikaInputStream stream = TikaInputStream.get(new File(filename), metadata);
+        parser.parse(stream, handler, metadata, new ParseContext());
+        return handler.toString();
+    }
+     
+     
+     public hResult extractTextTika(File file, int iLimitLen, Long lTotalFiles, Long lCurrentFile) throws IOException, SAXException, TikaException {
+            hResult   oResult = new hResult() ; //search Result object      
+            
+             //org.apache.tika
+            oResult.m_iStatusCode = hResult.STATUS_ERR ; //DEFAULT
+            try{
+               oResult.m_oPayLoad = Indexer.parseUsingAutoDetect(file.getAbsolutePath(), iLimitLen) ;
+                       //com.hcc_medical.hcctika.extract.extractTextTika(file.getAbsolutePath(), lTotalFiles, lCurrentFile) ;
+               oResult.m_iStatusCode = hResult.STATUS_OK ;
+               oResult.m_eRetType = hResult.CONTENT ;
+            }catch(Exception ex){
+               System.err.println(ex.toString()) ;
+            }finally{
+                
+            }
+            
+            
+     System.out.println("Tika Extracted [" + oResult.m_oPayLoad.toString().length() + "] bytes.");
+     
+    /* 
+        if( oResult.m_oPayLoad.toString().length() < 1000 ){
+             System.out.println( oResult.m_oPayLoad.toString()) ;
+        }  
+      */  
+            if(file.isDirectory()){
+                oResult.m_strType = "DIR" ;
+            }     
+            oResult.m_strFilename = file.getName() ;
+            oResult.m_strPath = file.getPath() ;
+            oResult.m_lLastModified = file.lastModified() ;
+            oResult.m_strLastModified = hcc_utils.getLastModifiedString(file) ;
+            oResult.m_strYear = hcc_utils.getYear(file) ;
+            oResult.m_strExt = hcc_utils.getExtensionUpper(file) ;
+            oResult.m_lFileLength = file.length() ;
+            
+            return  oResult ;
      }
   
   

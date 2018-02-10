@@ -1,8 +1,0 @@
-X:\SharedDownloads\Projekte\hcc\hcc_search\dist\logs\duplicates.txt
-X:\SharedDownloads\Projekte\hcc\hcc_search\dist\logs\FileExcludeList.txt
-X:\SharedDownloads\Projekte\hcc\hcc_search\dist\logs\FileList.txt
-X:\SharedDownloads\Projekte\hcc\hcc_search\dist\logs\IndexFilesApp.txt
-X:\SharedDownloads\Projekte\LHSystems\localhost\hcc\hcc_search\dist\logs\2005_2012_FileList.txt
-X:\SharedDownloads\Projekte\LHSystems\localhost\hcc\hcc_search\dist\logs\2005_2012_IndexFilesApp.txt
-X:\SharedDownloads\Projekte\LHSystems\localhost\hcc\hcc_search\dist\logs\FileList.txt
-X:\SharedDownloads\Projekte\LHSystems\localhost\hcc\hcc_search\dist\logs\IndexFilesApp.txt

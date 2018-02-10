@@ -20,13 +20,6 @@
         <group>
             <file>file:/D:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/hcc_search_Bean.java</file>
         </group>
-        <group name="hcc">
-            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/searchRT/utils/deltaMan.java</file>
-            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/hResult.java</file>
-            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/logger/objectLogger.java</file>
-            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/indexer/Indexer.java</file>
-            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/hcc_utils.java</file>
-            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/indexer/IndexFilesApp.java</file>
-        </group>
+        <group name="hcc"/>
     </open-files>
 </project-private>

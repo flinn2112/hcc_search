@@ -1,20 +1,15 @@
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\10005303558_1_Schrb. AG Br. 15.1.15.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\14032012104736164.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1422.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1423.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1424.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1425.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1426.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search - Kopie.html
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search.html
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\RE_MAYER_CONTAINER_2012.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\zusatzprogrammierung_ishmed.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14 - Kopie.pdf
-D:\SharedDownloads\Projekte\hcc\hcc_search\config\excludeExt.txt
-D:\SharedDownloads\Projekte\hcc\hcc_search\config\excludeFiles.txt
-D:\SharedDownloads\Projekte\hcc\hcc_search\config\includeExt.txt
-D:\SharedDownloads\Projekte\hcc\hcc_search\config\mimemap.txt
-D:\SharedDownloads\Projekte\hcc\hcc_search\config\server.xml
-D:\SharedDownloads\Projekte\hcc\hcc_search\config\tomcat-users.xml
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\10005303558_1_Schrb. AG Br. 15.1.15.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\12172013065337828.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\14032012104736164.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14 - Kopie.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1422.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1423.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1424.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1425.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1426.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search - Kopie.html
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search.html
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\RE_MAYER_CONTAINER_2012.pdf
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\zusatzprogrammierung_ishmed.pdf
