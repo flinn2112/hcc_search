@@ -45,11 +45,13 @@ public class searchResultHTML implements searchResultOut{
         String strRet = null ;
         URL oURL = null ;
         StringBuilder sb = new StringBuilder() ;
+        /*
         try{
-            strFilename = URLEncoder.encode( strFilename, "UTF-8") ;
+            -> would display some nonsense chars: strFilename = URLEncoder.encode( strFilename, "UTF-8") ;
         }
         catch(UnsupportedEncodingException ex){
         }
+        */
         //localpath? - when files are stored on the local harddrive
         if( true == m_bGenLocalPath){
             sb.append("<p class=\"search_result_p\">" );
