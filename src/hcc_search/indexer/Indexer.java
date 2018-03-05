@@ -143,7 +143,7 @@ public class Indexer {
    * @param file The file to index, or the directory to recurse into to find files to index
    * @throws IOException
    */
-  
+  //This method was superseeded by extractTextTika in 1.8.3.1
      public hResult extractText(File file,  Long lTotalFiles, Long lCurrentFile) throws IOException {
         hResult   oResult = new hResult() ; //search Result object
         
@@ -217,12 +217,35 @@ public class Indexer {
         
         return oResult ;
      }
+ 
      /*
-        2018 Apache Tika Extractor
+        1.8.3.1 check extracted Textlen is significantly lower than filesize,
+        then it could be suspect to review.
+        For HTML files there is always an overhead of tags, for PDF less.
+        In the first version we concentrate on PDFs.        
      */
+     public static boolean poorContent(hResult oResult, int iThresholdSize, int iFactor){
+         boolean bRet = false ;
+         
+         //System.out.println(oResult.m_strExt.toLowerCase());
+         
+         if( oResult.m_strExt.toLowerCase().matches( "pdf") ){
+           if( (oResult.m_iPayLoadLen < iThresholdSize) || (oResult.m_iPayLoadLen * iFactor) < oResult.m_lFileLength ){
+               bRet = true ;
+           }
+         }
+         return bRet ;
+     }
+     
+     
       /*
         2018 Apache Tika Extractor
-     */
+   __  _______ _____   ________   ____________ __ ___ 
+  / / / / ___//  _/ | / / ____/  /_  __/  _/ //_//   |
+ / / / /\__ \ / //  |/ / / __     / /  / // ,<  / /| |
+/ /_/ /___/ // // /|  / /_/ /    / / _/ // /| |/ ___ |
+\____//____/___/_/ |_/\____/    /_/ /___/_/ |_/_/  |_|
+ */
      
      private static String parseUsingAutoDetect(String filename, int iLimit) throws Exception {
         System.out.println("Handling using AutoDetectParser: [" + filename + "]");
@@ -241,11 +264,13 @@ public class Indexer {
             
              //org.apache.tika
             oResult.m_iStatusCode = hResult.STATUS_ERR ; //DEFAULT
+           
             try{
                oResult.m_oPayLoad = Indexer.parseUsingAutoDetect(file.getAbsolutePath(), iLimitLen) ;
                        //com.hcc_medical.hcctika.extract.extractTextTika(file.getAbsolutePath(), lTotalFiles, lCurrentFile) ;
                oResult.m_iStatusCode = hResult.STATUS_OK ;
                oResult.m_eRetType = hResult.CONTENT ;
+               oResult.m_iPayLoadLen = ((String)oResult.m_oPayLoad).length() ;
             }catch(Exception ex){
                System.err.println(ex.toString()) ;
             }finally{

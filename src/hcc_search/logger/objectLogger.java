@@ -72,8 +72,9 @@ public class objectLogger implements ILogger {
     
     public void log(hResult oResult){
         boolean bRet = false ;
-        StringBuilder sb = new StringBuilder() ;  
-        sb.append(oResult.m_strFilename) ;
+        StringBuilder sb = new StringBuilder() ; 
+        sb.append(oResult.m_strPath) ;
+        
         sb.append(m_strDelimiter) ;
         sb.append(hcc_utils.timestamp_now()) ;
         sb.append(m_strDelimiter) ;
@@ -84,6 +85,8 @@ public class objectLogger implements ILogger {
         sb.append(m_strDelimiter) ;        
         
         sb.append(oResult.m_lFileLength) ;
+        sb.append(m_strDelimiter) ;        
+         sb.append(oResult.m_iPayLoadLen) ;
         sb.append(m_strDelimiter) ;
         sb.append(oResult.m_strLastModified) ;
         sb.append("\r\n") ; //need to have new Line

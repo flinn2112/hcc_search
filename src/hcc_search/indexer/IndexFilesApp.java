@@ -41,6 +41,8 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import searchRT.utils.deltaMan;
 
 
@@ -62,6 +64,7 @@ public class IndexFilesApp implements IConfigProcessor{
     static Integer m_iTraceLevel = 0 ;
     static objectLogger m_ObjectLog = null ;
     static objectLogger m_DupLog = null ;
+    static objectLogger m_ReviewLog = null ; //1.8.3.1 Files that have low extraction rates for review
     static simpleLogger m_FileListLog = null ;
     static simpleLogger m_FileExcludeLog = null ;
     static MD5DB  m_MD5DB  ;
@@ -144,9 +147,14 @@ public class IndexFilesApp implements IConfigProcessor{
    IndexFilesApp.m_DupLog      = new objectLogger("duplicates.txt", System.getProperty("user.dir") + File.separator + "logs", 
                                                                                                 false  //no append, overwrite
                                                                                                      );
+   IndexFilesApp.m_ReviewLog      = new objectLogger("reviewResult.txt", System.getProperty("user.dir") + File.separator + "logs", 
+                                                                                                false  //no append, overwrite
+                                                                                                     );
+   
    IndexFilesApp.m_FileListLog = new simpleLogger("FileList.txt", System.getProperty("user.dir") + File.separator + "logs", bAppendFiles);
    
    IndexFilesApp.m_FileExcludeLog = new simpleLogger("FileExcludeList.txt", System.getProperty("user.dir") + File.separator + "logs", bAppendFiles);
+   
    
    
    
@@ -191,10 +199,7 @@ public class IndexFilesApp implements IConfigProcessor{
     if( false == hcc_utils.checkPath(strCurrFile)){
     System.out.println("Path [ " + strCurrFile + " ] does not exist - check argument please.") ;
     return ;
-    }
-    
-    
-    
+    }   
     
     //get index path from config
     hcc_utils.processCfgFile(strConfigPath + File.separator + "settings.cfg", ifa , "cfg");
@@ -234,11 +239,16 @@ public class IndexFilesApp implements IConfigProcessor{
         vTmp.add(ifa.m_VFiles.get(i)) ;  //copy over
         //if(  i > 0 && vTmp.size() % iMaxDocs == 0 ){
         dT.m_VFiles = vTmp ;
-        //nur Test f. Debug
-        //set 2112 into iChk to process files without starting a thread - only for dev
-        //if( 2112 == iChk )
-          //  dT.processFiles() ;    
-               
+        
+/* only for local debug without threads
+        */
+/*
+        try {            
+            dT.processFiles() ;
+        } catch (Exception ex) {
+            Logger.getLogger(IndexFilesApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   */         
            System.out.println("Processing [" + ifa.m_VFiles.get(i) + "] [" 
                + Integer.toString(i+1) +  "/" + ifa.m_VFiles.size() + "]" ) ;
            if( i> 0 && i%10000 == 0 ){
@@ -783,14 +793,17 @@ class dextorT extends Thread{
         try{
             m_sMon.setStateExtracting();
             //oResult =  oResult = dextorT.m_Indexer.extractText(f, m_lTotalFiles, m_lCurrentFile) ;
-//2018
-
-     oResult = dextorT.m_Indexer.extractTextTika(f,Integer.MAX_VALUE, m_lTotalFiles, m_lCurrentFile) ;            
+//2018 using Apache Tika
+            oResult = dextorT.m_Indexer.extractTextTika(f,Integer.MAX_VALUE, m_lTotalFiles, m_lCurrentFile) ;            
             if(oResult.m_iStatusCode != hResult.STATUS_OK){
                 System.out.println("<processFile> ---------> SKIPPED. Status was [" + oResult.m_iStatusCode + "]") ;
                 return ;
             }
                 
+            //1.8.3.1 
+            if( Indexer.poorContent(oResult, 1000, 250)){
+                IndexFilesApp.m_ReviewLog.log(oResult) ;              
+            }
             
             if(this.isInterrupted()){  //1.8.12.8
                 //thread was killed - when calling indexFile then the whole process would crash.                
