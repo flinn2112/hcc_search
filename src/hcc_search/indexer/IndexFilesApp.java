@@ -45,8 +45,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import searchRT.utils.deltaMan;
 
-
-
+//1.8.3.10 - under construction
+/*
+  put all necessary stuff in here to pass it between calls
+*/
+class clientCtxt{
+    Long m_lThreadTimeout = new Long(30000) ;
+    Integer m_iReorgAfter = 0 ;
+}
 
 /** Index all text files under a directory.
  * <p>
@@ -676,6 +682,27 @@ class stateMonitor{
 }
 
 /*
+
+1.8.3.7 parallelize some stuff.
+*/
+class checkerT extends Thread{
+    private hResult m_oResult = null ;
+    private int     m_iRatio = 250 ; //ration between size and recognition.
+    private int     m_iMinTxtLen = 1000 ;
+   public checkerT(hResult r, int iMinTxtLen, int iRatio){
+       m_oResult = r ;
+       m_iMinTxtLen = iMinTxtLen ;
+       m_iRatio     = iRatio ;
+   }
+    public void run(){
+        //1.8.3.1 
+            if( Indexer.poorContent(m_oResult, m_iMinTxtLen, m_iRatio)){
+                IndexFilesApp.m_ReviewLog.log(m_oResult) ;              
+            }
+    }
+}
+
+/*
  * 
  * MORE CHECKING! 
  * Paths need to be accessible!
@@ -787,7 +814,8 @@ class dextorT extends Thread{
     */
     public void processFile(IndexWriter w, File f) throws Exception{
         //Thread customization
-        hResult oResult = null ;
+        hResult  oResult = null ;
+        checkerT ct      = null ;
         this.setName(f.getName()); //Thread's name
         System.out.println("<processFile> ---------> Current Docs in Index. Total: [" + w.numDocs() + "] In RAM [" + w.numRamDocs() + "]") ;
         try{
@@ -801,9 +829,18 @@ class dextorT extends Thread{
             }
                 
             //1.8.3.1 
+            ct = new checkerT(oResult, 1000, 100) ;
+            ct.run(); //replaces direct call to poorContent
+            /*
             if( Indexer.poorContent(oResult, 1000, 250)){
                 IndexFilesApp.m_ReviewLog.log(oResult) ;              
             }
+            */
+ /*           
+ if( 2112 == 2112){
+     return ;
+ } 
+*/
             
             if(this.isInterrupted()){  //1.8.12.8
                 //thread was killed - when calling indexFile then the whole process would crash.                

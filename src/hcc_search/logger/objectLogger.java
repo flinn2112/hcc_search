@@ -71,6 +71,7 @@ public class objectLogger implements ILogger {
     }
     
     public void log(hResult oResult){
+        double fRatio = 0 ;
         boolean bRet = false ;
         StringBuilder sb = new StringBuilder() ; 
         sb.append(oResult.m_strPath) ;
@@ -86,9 +87,21 @@ public class objectLogger implements ILogger {
         
         sb.append(oResult.m_lFileLength) ;
         sb.append(m_strDelimiter) ;        
-         sb.append(oResult.m_iPayLoadLen) ;
+        sb.append(oResult.m_iPayLoadLen) ;
         sb.append(m_strDelimiter) ;
         sb.append(oResult.m_strLastModified) ;
+        
+        sb.append(oResult.m_iPayLoadLen) ;
+        sb.append(m_strDelimiter) ;
+         //1.8.3.7 -stats
+        if(oResult.m_iPayLoadLen > 0){            
+            fRatio =  ((float)oResult.m_iPayLoadLen / (float)oResult.m_lFileLength ) * 100 ;            
+        }else{
+            fRatio = 0F ;
+        }
+        sb.append(fRatio) ;
+        sb.append("%") ;
+        sb.append(m_strDelimiter) ; 
         sb.append("\r\n") ; //need to have new Line
         
         try{

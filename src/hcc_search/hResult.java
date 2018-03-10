@@ -33,7 +33,7 @@ public class hResult{
         m_strDocType  = null ;
         m_eRetType    = hResult.NULL ;
         m_iStatusCode = 0 ;     //status of processing
-        m_strType     = "FILE" ; //default
+        m_strType     = "FILE" ; //default        
     }
     public static final int NULL     = 0;  
     public static final int EMPTY    = 1;  
