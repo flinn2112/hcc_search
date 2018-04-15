@@ -56,7 +56,14 @@ class fileFilter{
         m_dtHigh = dtHigh ;
     }
     
-    public fileFilter(int iDiff){        
+    public fileFilter(int iDiff){  
+        if( 0 == Math.abs(iDiff) ){ //set default
+            iDiff = -10 ; 
+        }
+        
+        if(iDiff > 0) iDiff = iDiff * -1 ;
+        
+        //iDiff should be a negative number - files created in the future would not exist.
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());  //now
         //calendar.add(Calendar., beforeMonths);
@@ -105,8 +112,9 @@ public class IndexFilesApp implements IConfigProcessor{
     static MD5DB  m_MD5DB  ;
     //1.8.4.15 -flag for deltaIndex -> force indexing of changed files
     static boolean m_bForceUpdate = false ; //default is false
-    static String m_strDir = null ;  //1.8.4.15 delta directory
+    public String m_strDir = null ;  //1.8.4.15 delta directory
     public fileFilter m_fileFilter = null ;
+    public int m_lastModSince = 14 ; //days modified(for args)
     
     
   public IndexFilesApp() {
@@ -152,6 +160,9 @@ public class IndexFilesApp implements IConfigProcessor{
     //docsPath = "/Users/frankkempf/Documents/Volume_2/SharedDownloads/Dokus" ;
     
     for(int i=0;i<args.length;i++) {
+        
+        System.out.println("Argument  [" + args[i] + "]") ;
+        
       if ("-index".equals(args[i])) {
         strIndexPath = args[i+1];
         i++;
@@ -165,7 +176,10 @@ public class IndexFilesApp implements IConfigProcessor{
         IndexFilesApp.m_bForceUpdate = true ;
       }
        else if ("-deltaDir".equals(args[i])) {//1.8.4.15 index this directory only
-        IndexFilesApp.m_strDir =  args[i+1] ;
+        ifa.m_strDir =  args[i+1] ;
+      }
+       else if ("-lastMod".equals(args[i])) {//1.8.4.15 index this directory only
+        ifa.m_lastModSince =  Integer.parseInt(args[i+1]) ;
       }
       else if ("-cfg".equals(args[i])) {
         System.out.println("Argument  cfg is set  [" + args[i+1] + "]") ;
@@ -259,18 +273,20 @@ public class IndexFilesApp implements IConfigProcessor{
     
     //1.8.15.4 in case of delta indexing dirs
    //dev only 
-   IndexFilesApp.m_strDir  = "X:\\ScanRoot\\docs.allis1.com" ;
+   //IndexFilesApp.m_strDir  = "X:\\ScanRoot\\docs.allis1.com" ;
    
-   ifa.m_fileFilter = new fileFilter(-10) ;
-    if( null != IndexFilesApp.m_strDir ){
-        ifa.processLine(m_strDir, "dir") ;
+   ifa.m_fileFilter = new fileFilter(ifa.m_lastModSince) ;
+    if( null != ifa.m_strDir ){
+        ifa.processLine(ifa.m_strDir, "dir") ;
     }
     else{
         hcc_utils.processCfgFile(strConfigPath + File.separator + "directories.cfg", ifa , "dir");
     }    
     
     System.out.println("Path for indexing [ " + strIndexPath + " ].");   
-    
+//if(1==1) return ; //dev
+
+
     dextorT dT = null; //new dextorT( strIndexPath, bCreateIndex, new Long(ifa.m_VFiles.size())) ;
     
     System.out.println("Collected [" + String.valueOf(ifa.m_VFiles.size()) + "] files." ) ;
