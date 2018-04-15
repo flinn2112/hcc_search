@@ -4,27 +4,19 @@
  */
 package hcc_search.indexer; 
 
-import hcc_search.indexer.Indexer; 
 import hcc_search.config.IConfigProcessor;
 import hcc_search.hResult;
 import hcc_search.hcc_utils;
 import hcc_search.logger.*;
 import searchRT.utils.* ;
 
-import hcc_search.myClassLoader;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 //import org.apache.lucene.document.NumericField;
 //import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 //import org.apache.commons.io ;
 
 
@@ -39,10 +31,9 @@ import java.util.Hashtable ;
 import java.io.File;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import searchRT.utils.deltaMan;
 
 //1.8.3.10 - under construction
@@ -52,6 +43,44 @@ import searchRT.utils.deltaMan;
 class clientCtxt{
     Long m_lThreadTimeout = new Long(30000) ;
     Integer m_iReorgAfter = 0 ;
+}
+
+/*
+2018 1.8.4.15 for delta enum files
+*/
+class fileFilter{
+    public Date m_dtLow = null ;
+    public Date m_dtHigh = null ;
+    public fileFilter(Date dtHigh, Date dtLow){
+        m_dtLow  = dtLow ;
+        m_dtHigh = dtHigh ;
+    }
+    
+    public fileFilter(int iDiff){        
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());  //now
+        //calendar.add(Calendar., beforeMonths);
+        calendar.add(Calendar.DAY_OF_MONTH, iDiff) ;
+        this.m_dtLow = calendar.getTime() ;
+        
+    }
+    
+    public boolean accept(File f){
+        if(  null == f ) return false ;
+        boolean bRet = true ;
+        long lMod = f.lastModified() ;
+        Date dtMod = new Date(lMod) ;
+        if( null != m_dtLow && null != m_dtHigh){
+            bRet = ( (dtMod.after(m_dtLow) )  && (dtMod.before(m_dtHigh)) ) ;            
+        }
+        if( null != m_dtLow && null == m_dtHigh){
+            bRet = ( dtMod.after(m_dtLow) ) ;
+        }
+        if( null == m_dtLow && null != m_dtHigh){
+            bRet = ( dtMod.before(m_dtHigh) ) ;
+        }               
+        return bRet ;
+    }
 }
 
 /** Index all text files under a directory.
@@ -74,6 +103,11 @@ public class IndexFilesApp implements IConfigProcessor{
     static simpleLogger m_FileListLog = null ;
     static simpleLogger m_FileExcludeLog = null ;
     static MD5DB  m_MD5DB  ;
+    //1.8.4.15 -flag for deltaIndex -> force indexing of changed files
+    static boolean m_bForceUpdate = false ; //default is false
+    static String m_strDir = null ;  //1.8.4.15 delta directory
+    public fileFilter m_fileFilter = null ;
+    
     
   public IndexFilesApp() {
       m_VFiles = new Vector<String>();
@@ -127,6 +161,12 @@ public class IndexFilesApp implements IConfigProcessor{
       } else if ("-update".equals(args[i])) {
         bCreateIndex = false;
       }
+       else if ("-forceUpd".equals(args[i])) {//1.8.4.15
+        IndexFilesApp.m_bForceUpdate = true ;
+      }
+       else if ("-deltaDir".equals(args[i])) {//1.8.4.15 index this directory only
+        IndexFilesApp.m_strDir =  args[i+1] ;
+      }
       else if ("-cfg".equals(args[i])) {
         System.out.println("Argument  cfg is set  [" + args[i+1] + "]") ;
         strConfigPath = args[i+1];
@@ -137,9 +177,9 @@ public class IndexFilesApp implements IConfigProcessor{
           IndexFilesApp.m_bUpdateFileDelta = true ;
       }
     }
-      
   
    IndexFilesApp.m_htConfig = new Hashtable() ;
+ 
    
    if( null == strConfigPath ){
        strConfigPath = System.getProperty("user.dir") + File.separator + "config" ;
@@ -153,7 +193,7 @@ public class IndexFilesApp implements IConfigProcessor{
    IndexFilesApp.m_DupLog      = new objectLogger("duplicates.txt", System.getProperty("user.dir") + File.separator + "logs", 
                                                                                                 false  //no append, overwrite
                                                                                                      );
-   IndexFilesApp.m_ReviewLog      = new objectLogger("reviewResult.txt", System.getProperty("user.dir") + File.separator + "logs", 
+   IndexFilesApp.m_ReviewLog   = new objectLogger("reviewResult.txt", System.getProperty("user.dir") + File.separator + "logs", 
                                                                                                 false  //no append, overwrite
                                                                                                      );
    
@@ -217,22 +257,25 @@ public class IndexFilesApp implements IConfigProcessor{
         return ;
     }
     
-    
-    hcc_utils.processCfgFile(strConfigPath + File.separator + "directories.cfg", ifa , "dir");
-    
-    
-    
-    
-    System.out.println("Path for indexing [ " + strIndexPath + " ].");
+    //1.8.15.4 in case of delta indexing dirs
+   //dev only 
+   IndexFilesApp.m_strDir  = "X:\\ScanRoot\\docs.allis1.com" ;
    
+   ifa.m_fileFilter = new fileFilter(-10) ;
+    if( null != IndexFilesApp.m_strDir ){
+        ifa.processLine(m_strDir, "dir") ;
+    }
+    else{
+        hcc_utils.processCfgFile(strConfigPath + File.separator + "directories.cfg", ifa , "dir");
+    }    
+    
+    System.out.println("Path for indexing [ " + strIndexPath + " ].");   
     
     dextorT dT = null; //new dextorT( strIndexPath, bCreateIndex, new Long(ifa.m_VFiles.size())) ;
     
     System.out.println("Collected [" + String.valueOf(ifa.m_VFiles.size()) + "] files." ) ;
     int iChk = 0 ;
-    //iterate all files
-    
-    
+    //iterate all files   
     
     for(int i=0;i<ifa.m_VFiles.size();i++)  //
     // nur f. Debug for(int i=0;i<1000;i++)
@@ -384,13 +427,24 @@ public class IndexFilesApp implements IConfigProcessor{
           return ; //do not add directories
         }
         //collectFiles(file.getName()) ;
-      //  
+      // 
+      
+      if( null != this.m_fileFilter){
+          if(!this.m_fileFilter.accept(file)){
+              System.out.println("collectFiles: " + strObjectName + " rejected by file filter." );
+              return ;
+          }
+          else{
+              System.out.println("collectFiles: " + strObjectName + " accepted by file filter." );
+          }
+      }
+      
       strExt = hcc_utils.getExtension(strObjectName) ;  //only add certain types      
       if( null != strExt && true == hcc_utils.isContained(strExt) ){ 
           if( null != htAlreadyProcessed ){ //delta requested - check if not already processed
              if( null != htAlreadyProcessed.get(strObjectName) ){ //already IN
                  if( IndexFilesApp.m_iTraceLevel > 2 )
-                    System.out.println("collectFiles: " + "strObjectName already processed." );
+                    System.out.println("collectFiles: " + strObjectName + "already processed." );
                  return ;
              }
           }

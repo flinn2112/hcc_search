@@ -112,8 +112,7 @@ public class hcc_utils {
    
    
   
-  public static boolean checkPath(String strPath){
-      
+  public static boolean checkPath(String strPath){      
       if(null == strPath){
           System.err.println("hcc_utils.checkPath: a path was delivered that is NULL") ;
           return false ;
@@ -136,8 +135,7 @@ public class hcc_utils {
      iPos = strPath.lastIndexOf(File.separator);
      if(iPos > 0){
          strRet = strPath.substring( iPos + 1 ) ;
-     }
-     
+     }     
      return strRet ;
   }
   

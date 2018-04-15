@@ -74,13 +74,17 @@ package hcc_search;
                 this (new HWPFDocument(fs));
                 this .fs = fs;
             }
-
-            public WordFileWrapper(DirectoryNode dir, POIFSFileSystem fs)
-                    throws IOException {
-                this (new HWPFDocument(dir, fs));
+/*
+            public WordFileWrapper(DirectoryNode dir, POIFSFileSystem fs){
+            //        throws IOException 
+            
+                
+                
+                   this (new HWPFDocument(dir, fs));
                 this .fs = fs;
+                
             }
-
+*/
             /**
              * Create a new Word Extractor
              * @param doc The HWPFDocument to extract from

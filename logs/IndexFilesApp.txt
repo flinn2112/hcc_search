@@ -1,1 +1,39 @@
-000-NS2112.js;08.12.2017 16:38:46;FILE;12950;24. Juni 2013
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js;000-NS2112.js;03.03.2018 11:27:52;FILE;12950;12951;24. Juni 2013
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\10005303558_1_Schrb. AG Br. 15.1.15.pdf;10005303558_1_Schrb. AG Br. 15.1.15.pdf;03.03.2018 11:27:59;FILE;87915;996;22. Februar 2015
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\12172013065337828.pdf;12172013065337828.pdf;03.03.2018 11:28:28;FILE;5318283;9369;27. Februar 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\14032012104736164.pdf;14032012104736164.pdf;03.03.2018 11:28:29;FILE;14652918;13737;1. August 2012
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14 - Kopie.pdf;auszuege_300_1_bis_14 - Kopie.pdf;03.03.2018 11:28:30;FILE;17677897;96490;10. Oktober 2010
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1422.pdf;ct1422.pdf;03.03.2018 11:28:42;FILE;20026034;797966;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1423.pdf;ct1423.pdf;03.03.2018 11:28:56;FILE;21580444;789364;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1424.pdf;ct1424.pdf;03.03.2018 11:29:00;FILE;18440043;746109;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1425.pdf;ct1425.pdf;03.03.2018 11:29:03;FILE;22167800;782716;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1426.pdf;ct1426.pdf;03.03.2018 11:29:05;FILE;18114867;746582;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search - Kopie.html;hcc_search - Kopie.html;03.03.2018 11:29:05;FILE;1135;24;5. März 2011
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\pbr_1_2018.pdf;pbr_1_2018.pdf;03.03.2018 11:29:13;FILE;349595;2;20. Februar 2018
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\RE_MAYER_CONTAINER_2012.pdf;RE_MAYER_CONTAINER_2012.pdf;03.03.2018 11:29:14;FILE;4275467;1433;23. August 2012
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\zusatzprogrammierung_ishmed.pdf;zusatzprogrammierung_ishmed.pdf;03.03.2018 11:29:15;FILE;15464062;96077;21. Dezember 2010
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js;000-NS2112.js;03.03.2018 11:37:24;FILE;12950;12951;24. Juni 2013
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js;03.03.2018 11:39:02;FILE;12950;12951;24. Juni 2013
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\10005303558_1_Schrb. AG Br. 15.1.15.pdf;03.03.2018 11:39:06;FILE;87915;996;22. Februar 2015
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\12172013065337828.pdf;03.03.2018 11:39:14;FILE;5318283;9369;27. Februar 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\14032012104736164.pdf;03.03.2018 11:39:14;FILE;14652918;13737;1. August 2012
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14 - Kopie.pdf;03.03.2018 11:39:15;FILE;17677897;96490;10. Oktober 2010
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1422.pdf;03.03.2018 11:39:22;FILE;20026034;797966;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1423.pdf;03.03.2018 11:39:30;FILE;21580444;789364;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1424.pdf;03.03.2018 11:39:32;FILE;18440043;746109;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1425.pdf;03.03.2018 11:39:35;FILE;22167800;782716;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1426.pdf;03.03.2018 11:39:36;FILE;18114867;746582;1. Dezember 2014
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search - Kopie.html;03.03.2018 11:39:37;FILE;1135;24;5. März 2011
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\pbr_1_2018.pdf;03.03.2018 11:39:41;FILE;349595;2;20. Februar 2018
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\RE_MAYER_CONTAINER_2012.pdf;03.03.2018 11:39:46;FILE;4275467;1433;23. August 2012
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\zusatzprogrammierung_ishmed.pdf;03.03.2018 11:39:46;FILE;15464062;96077;21. Dezember 2010
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js;15.04.2018 17:10:00;FILE;12950;12951;24. Juni 201312951;100.00772094726562%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\10005303558_1_Schrb. AG Br. 15.1.15.pdf;15.04.2018 17:10:01;FILE;87915;996;22. Februar 2015996;1.132912516593933%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\14032012104736164.pdf;15.04.2018 17:10:02;FILE;14652918;13737;1. August 201213737;0.09374924749135971%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14.pdf;15.04.2018 17:10:03;FILE;17677897;96490;10. Oktober 201096490;0.5458228588104248%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1422.pdf;15.04.2018 17:10:07;FILE;20026034;797966;1. Dezember 2014797966;3.9846432209014893%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\000-NS2112.js;15.04.2018 17:10:34;FILE;12950;12951;24. Juni 201312951;100.00772094726562%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\10005303558_1_Schrb. AG Br. 15.1.15.pdf;15.04.2018 17:10:35;FILE;87915;996;22. Februar 2015996;1.132912516593933%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\14032012104736164.pdf;15.04.2018 17:10:36;FILE;14652918;13737;1. August 201213737;0.09374924749135971%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14.pdf;15.04.2018 17:10:37;FILE;17677897;96490;10. Oktober 201096490;0.5458228588104248%;
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\ct1422.pdf;15.04.2018 17:10:40;FILE;20026034;797966;1. Dezember 2014797966;3.9846432209014893%;

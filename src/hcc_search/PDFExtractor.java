@@ -38,10 +38,12 @@ import java.io.IOException;
 
 import java.util.*;
 import java.text.*;
+
+/*
 import org.apache.pdfbox.searchengine.lucene.LucenePDFDocument ;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
-
+*/
 
 public class PDFExtractor {
     
@@ -52,7 +54,7 @@ public class PDFExtractor {
     throws IOException {
         Document doc = null ;
         hResult oResult = new hResult() ;
-       
+/*       
       try{  
                  System.out.println("processing file [" + file + "]");
                  doc = LucenePDFDocument.getDocument( file );           
@@ -63,7 +65,8 @@ public class PDFExtractor {
                 oResult.m_eRetType = hResult.NULL ;
                 System.out.println("skipping file [" + file + "]");
       }
-       return oResult ;
+*/      
+       return null ;//oResult ;
      }
   
   public static hResult processDocument(java.io.File file)
@@ -71,7 +74,7 @@ public class PDFExtractor {
       
       hResult oResult = new hResult() ;
       oResult.m_eRetType = hResult.NULL ;
-      
+      /*
         try
         {
             System.out.println("PDFExtractor processDocument - Opening file [" + file.getName() + "]");
@@ -90,7 +93,8 @@ public class PDFExtractor {
         {
         ex.printStackTrace();
         }
-         return oResult ;
+        */
+         return null; //oResult ;
       
     }
   
@@ -102,7 +106,7 @@ public class PDFExtractor {
        if( null == args.m_is ){           
             return null ;
         }
-      
+      /*
         try
         {
             PDDocument pddDocument = PDDocument.load(args.m_is);            
@@ -119,7 +123,8 @@ public class PDFExtractor {
         {
         ex.printStackTrace();
         }
-         return oResult ;
+        */
+         return null ; //oResult ;
       
     }
   
@@ -129,7 +134,7 @@ public class PDFExtractor {
       
       hResult oResult = new hResult() ;
       oResult.m_eRetType = hResult.NULL ;
-      
+      /*
         try
         {
             PDDocument pddDocument = PDDocument.load(strContentPDF);            
@@ -146,7 +151,8 @@ public class PDFExtractor {
         {
             ex.printStackTrace();
         }
-         return oResult ;
+        */
+         return null; //oResult ;
       
     }
   
@@ -157,7 +163,8 @@ public class PDFExtractor {
   public static String processDocument2(String strFilename)
      {
       String strText = null ;
-        try
+      /*
+      try
         {
             PDDocument pddDocument=PDDocument.load(new File(strFilename));
             PDFTextStripper textStripper=new PDFTextStripper();
@@ -168,6 +175,7 @@ public class PDFExtractor {
         {
         ex.printStackTrace();
         }
+        */
          return strText ;
     }
 }

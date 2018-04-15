@@ -1,0 +1,4 @@
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14.pdf;auszuege_300_1_bis_14.pdf;03.03.2018 11:28:31;FILE;17677897;96490;10. Oktober 2010
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search.html;hcc_search.html;03.03.2018 11:29:11;FILE;1135;24;5. März 2011
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\auszuege_300_1_bis_14.pdf;03.03.2018 11:39:15;FILE;17677897;96490;10. Oktober 2010
+x:\SharedDownloads\Projekte\hcc\hcc_search\documents_dbg\hcc_search.html;03.03.2018 11:39:38;FILE;1135;24;5. März 2011
