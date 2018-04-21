@@ -81,3 +81,4 @@ dist/logs/FileExcludeList.txt
 dist/logs/bak/IndexFilesApp.txt
 *.class
 *.class
+*.class

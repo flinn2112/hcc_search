@@ -114,7 +114,7 @@ public class IndexFilesApp implements IConfigProcessor{
     static boolean m_bForceUpdate = false ; //default is false
     public String m_strDir = null ;  //1.8.4.15 delta directory
     public fileFilter m_fileFilter = null ;
-    public int m_lastModSince = 14 ; //days modified(for args)
+    public int m_lastModSince = 0 ; //days modified(for args) DEFAULT is 0 which means: do not use lastMod
     
     
   public IndexFilesApp() {
@@ -123,10 +123,8 @@ public class IndexFilesApp implements IConfigProcessor{
 
   /** Index all text files under a directory. */
   public static void main(String[] args) {
-    String usage = "java org.apache.lucene.demo.IndexFiles"
-                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-cfg CONFIG_PATH] [-update]\n\n"
-                 + "This indexes the documents in DOCS_PATH, creating a Lucene index"
-                 + "in INDEX_PATH that can be searched with SearchFiles";
+    String usage = "java -jar hcc_search.jar"
+                 + " [-deltaDir PATH] [-lastMod Number(in Days)] [-forceUpd (update Content even if present)] \n\n";
     String strIndexPath   = null ;
     String strDocPath     = null ;
     String strConfigPath  = null ;
@@ -159,9 +157,14 @@ public class IndexFilesApp implements IConfigProcessor{
     */
     //docsPath = "/Users/frankkempf/Documents/Volume_2/SharedDownloads/Dokus" ;
     
-    for(int i=0;i<args.length;i++) {
+    for(int i=0;i<args.length;i++) {        
+        System.out.println("Argument  [" + args[i] + "]") ;       
         
-        System.out.println("Argument  [" + args[i] + "]") ;
+      if ("-help".equals(args[i])) {
+          System.out.println(usage); 
+          return ;
+      }   
+        
         
       if ("-index".equals(args[i])) {
         strIndexPath = args[i+1];
@@ -274,9 +277,11 @@ public class IndexFilesApp implements IConfigProcessor{
     //1.8.15.4 in case of delta indexing dirs
    //dev only 
    //IndexFilesApp.m_strDir  = "X:\\ScanRoot\\docs.allis1.com" ;
+   if( 0 != ifa.m_lastModSince ){
+       ifa.m_fileFilter = new fileFilter(ifa.m_lastModSince) ;
+   }
    
-   ifa.m_fileFilter = new fileFilter(ifa.m_lastModSince) ;
-    if( null != ifa.m_strDir ){
+    if( null != ifa.m_strDir ){        
         ifa.processLine(ifa.m_strDir, "dir") ;
     }
     else{

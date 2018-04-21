@@ -1,0 +1,1 @@
+java -jar hcc_search.jar -deltaDir X:\ScanRoot\2017 -lastMod 14
