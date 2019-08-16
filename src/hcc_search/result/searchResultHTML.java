@@ -45,13 +45,14 @@ public class searchResultHTML implements searchResultOut{
         String strRet = null ;
         URL oURL = null ;
         StringBuilder sb = new StringBuilder() ;
-        /*
+        String strDisplayFilename = strFilename ; //f. Klartext
         try{
-            -> would display some nonsense chars: strFilename = URLEncoder.encode( strFilename, "UTF-8") ;
+            //-> would display some nonsense chars: 
+            strFilename = URLEncoder.encode( strFilename, "UTF-8") ;
         }
         catch(UnsupportedEncodingException ex){
         }
-        */
+        
         //localpath? - when files are stored on the local harddrive
         if( true == m_bGenLocalPath){
             sb.append("<p class=\"search_result_p\">" );
@@ -59,7 +60,7 @@ public class searchResultHTML implements searchResultOut{
             sb.append( strFilename + "\" target=\"_blank\">" ); 
             sb.append(strTitle +  "</a>\n" );
             sb.append("&nbsp;&nbsp;&nbsp;<small class=\"lastModified\">" + strLastModified +  "</small></p>\n" );
-            sb.append("<p class=\"searchResultFileDetails\">Local:" + strFilename + "</p>\n" );
+            sb.append("<p class=\"searchResultFileDetails\">Local:" + strDisplayFilename + "</p>\n" );
         }
         else{
                 sb.append( "<p class=\"search_result_p\">" ) ;
@@ -69,7 +70,7 @@ public class searchResultHTML implements searchResultOut{
                 sb.append(  strFilename + "\" target=\"_blank\">" ) ;
                 sb.append(  strTitle +  "</a>\n" ) ;
                 sb.append(  "&nbsp;&nbsp;&nbsp;<small class=\"lastModified\">" + strLastModified +  "</small></p>\n" ) ;
-                sb.append(  "<p class=\"searchResultFileDetails\">" + strFilename + "</p>\n" ) ;
+                sb.append(  "<p class=\"searchResultFileDetails\">" + strDisplayFilename + "</p>\n" ) ;
              
              //Append extended Attributes if available.
                 if( null != oEA ){

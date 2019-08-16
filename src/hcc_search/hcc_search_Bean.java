@@ -122,9 +122,8 @@ public class hcc_search_Bean implements Serializable, IConfigProcessor {
     }
     
     //Read settings.
-    public  void readConfig(String strFullPath, String strType){
-        int iRet = 0 ;
-        iRet = hcc_utils.readIniFile(strFullPath, m_htConfig) ; //get config ini into hashtable
+    public  int readConfig(String strFullPath, String strType){
+        return hcc_utils.readIniFile(strFullPath, m_htConfig) ; //get config ini into hashtable
     }
 }
 

@@ -104,6 +104,7 @@ public class IndexFilesApp implements IConfigProcessor{
     String strTmp1 = null ;
     String strTmp2 = null ;
     static Integer m_iTraceLevel = 0 ;
+    static Integer m_iReorgAfter = 5000 ; //1.9.8.16 - variables Einstellen v. Reorg nach n-Dokumenten.
     static objectLogger m_ObjectLog = null ;
     static objectLogger m_DupLog = null ;
     static objectLogger m_ReviewLog = null ; //1.8.3.1 Files that have low extraction rates for review
@@ -268,6 +269,8 @@ public class IndexFilesApp implements IConfigProcessor{
     hcc_utils.processCfgFile(strConfigPath + File.separator + "settings.cfg", ifa , "cfg");
     strIndexPath = (String)IndexFilesApp.m_htConfig.get("index");
     IndexFilesApp.m_iTraceLevel = Integer.parseInt( (String) IndexFilesApp.m_htConfig.get("trace") );
+    IndexFilesApp.m_iReorgAfter = Integer.parseInt( (String) IndexFilesApp.m_htConfig.get("reorgAfter") );
+    
     System.out.println("Index Directory [ " + strIndexPath + " ]") ;
     if( false == hcc_utils.checkPath(strIndexPath)){
         System.out.println("Index Directory [ " + strIndexPath + " ] does not exist - check path please.") ;
@@ -321,7 +324,7 @@ public class IndexFilesApp implements IConfigProcessor{
    */         
            System.out.println("Processing [" + ifa.m_VFiles.get(i) + "] [" 
                + Integer.toString(i+1) +  "/" + ifa.m_VFiles.size() + "]" ) ;
-           if( i> 0 && i%10000 == 0 ){
+           if( i> 0 && i%ifa.m_iReorgAfter == 0 ){
                System.out.println("----------->  Reached next batch mark [" + Integer.toString(i) + "] reorg index...");
                dT.reorg() ; //12/2017 - wieder aktiviert
            }

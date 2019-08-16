@@ -82,3 +82,10 @@ dist/logs/bak/IndexFilesApp.txt
 *.class
 *.class
 *.class
+/build/
+*.class
+*.txt
+*.DS_Store
+*.doc
+*.lock
+*.DS_Store

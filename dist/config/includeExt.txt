@@ -26,6 +26,7 @@ aba
 
 php
 
+inc
 xml
 
 xsl
@@ -49,6 +50,8 @@ vb
 
 xls
 
+xlsx
+xlsm
 memo
 
 manifest

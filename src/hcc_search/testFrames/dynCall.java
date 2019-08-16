@@ -38,6 +38,11 @@ public class dynCall{
              Date dt = calendar.getTime() ;
              hcc_search.ht_container htc = new hcc_search.ht_container() ; 
              htc.m_ht = mime.ht_MapMime ;
+             
+             strRet = "X:/ScanRoot/2012/autobahn_min.pdf" ;
+             strRet = strRet.replaceAll("[a-zA-z]:[\\/\\\\]", "") ;
+             
+             
              String strMime = searchRT.utils.mime.get(htc, 
                      "D:\\SharedDownloads\\Projekte\\hcc\\hcc_search_jsp\\build\\web\\config\\mimemap.txt", "doc", sbResult);
              System.out.println(hcc_utils.getDateString(dt)) ;
