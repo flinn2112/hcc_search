@@ -33,7 +33,7 @@ public class customSearch{
        //testURNSearchAndHighlighting() ;
        //testContentSearchAndHighlighting() ;
        
-       so = new hcc_search_opts("+revolt*", "contents", "d:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index",
+       so = new hcc_search_opts("versicherungsverein", "contents", "z:\\", // "x:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index",
                false, hcc_search_opts._HTML_, null, true, "highlightText" ) ;
        
        fLog.log("index.jsp.log - query.", "Index: " + so.m_strIndexDir, 0) ; 
@@ -45,13 +45,13 @@ public class customSearch{
        //oResult = searchBean.search2(  so.m_strIndexDir,  so, null, false);
        oResult = searchBean.search2(so.m_strIndexDir, so, null, false);
        //hcc_utils.escapeTerm("healthcare-components.com/inforecord/hcc_inforecord.php?lang=en")
-  
+       /*
        so = new hcc_search_opts(hcc_utils.escapeTerm("healthcare-components.com/inforecord/hcc_inforecord.php"), 
-               "URN", "d:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index", true,  
+               "URN", "x:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index", true,  
                hcc_search_opts._HTML_, "TEST") ;   
      
        oResult = cs.search2(  so, new searchResultHTML()) ;
-       
+       */
        System.out.println("   Result: " + oResult.m_strSearchResult );
        //hcc_search_Bean b = new hcc_search_Bean() ;
        //b.search("/Users/frankkempf/Documents/index", "GRN") ;

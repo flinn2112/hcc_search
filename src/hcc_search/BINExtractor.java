@@ -21,7 +21,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package hcc_search;
+package hcc_search; 
 
 /**
  *
