@@ -4,6 +4,7 @@
  */
 package hcc_search.indexer; 
 
+import hcc_pdfWndExtractor2020.pdfWndExtractor;
 import hcc_search.config.IConfigProcessor;
 import hcc_search.hResult;
 import hcc_search.hcc_utils;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import java.util.Date;
+import org.apache.lucene.document.FieldType;
 import searchRT.utils.deltaMan;
 
 //1.8.3.10 - under construction
@@ -131,6 +133,10 @@ public class IndexFilesApp implements IConfigProcessor{
     String strConfigPath  = null ;
     boolean bAppendFiles = false ;    
     boolean bCreateIndex   = false ;
+    
+      pdfWndExtractor pWE = null ;
+    pWE = new pdfWndExtractor() ;
+    pWE.extractTest("x:\\tmp\\Rechnung_3181900154.pdf") ; //nur Test
     stateMonitor oStateMon = new stateMonitor( );
     
     Vector<String> vFiles = null ;
@@ -534,10 +540,12 @@ public class IndexFilesApp implements IConfigProcessor{
         Integer iID ;
         
         Field fDocField = null ; //Lucene attribute field
-        
+        Field field_V50         = null ; //1.8.20.5.1
+        FieldType ft    = null ; //1.8.20.5.1
         Document doc = null ;
     
-         
+        ft = new FieldType() ;                          
+        ft.setStored(true) ;  //1.8.20.5.1 - gilt f. alle - werden gespeichert
                  
                  
                  //1.6.11 - delta processing
@@ -570,17 +578,30 @@ public class IndexFilesApp implements IConfigProcessor{
                      case hResult.CONTENT: 
                      case hResult.UNKNOWN : //a string                     
                           doc = new Document();
-                          doc.add(new Field("contents", (String)oResult.m_oPayLoad,
-                                    Field.Store.YES, Field.Index.ANALYZED));                          
+                          
+                          field_V50 = new Field("contents", (String)oResult.m_oPayLoad, ft);       
+                          //1.8.20.5.1 Deprecated Crap - aber ob das neue noch wirklich funktioniert?? - testen
+                          doc.add(field_V50) ;
+                          //doc.add(new Field("contents", (String)oResult.m_oPayLoad,
+                          //          Field.Store.YES, Field.Index.ANALYZED)); 
+                          
                           Long lCheckSum = hcc_utils.getCheckSum((String)oResult.m_oPayLoad) ;
                           strTmp = lCheckSum.toString() ;
+                          field_V50 = new Field("checksum", strTmp, ft);  
+                          /*
                           doc.add(new Field("checksum", 
                                     strTmp,
                                     Field.Store.YES, Field.Index.ANALYZED));
+                          */
+                          doc.add(field_V50) ;
                           strTmp = String.valueOf(oResult.m_lFileLength ) ;
+                          field_V50 = new Field("checksum", strTmp, ft);  
+                          doc.add(field_V50);
+                          /*
                           doc.add(new Field("filesize", 
                                     strTmp,
                                     Field.Store.YES, Field.Index.ANALYZED));
+                          */
                           break ; 
                      default:         
                          System.out.println("indexFile Skipped: unknown Content Type [" + oResult.m_strFilename + "]" ) ;

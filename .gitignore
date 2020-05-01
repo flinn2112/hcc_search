@@ -89,3 +89,14 @@ dist/logs/bak/IndexFilesApp.txt
 *.doc
 *.lock
 *.DS_Store
+logs/duplicates.txt
+jars/._commons-collections-3.2.src.jar
+jars/._jsoup-1.7.1.jar
+jars/._lucene-analyzers-common-4.0-dev-1021515.jar
+jars/._lucene-analyzers-phonetic-4.0-2011-01-14_08-05-49.jar
+logs/duplicates.txt
+logs/FileExcludeList.txt
+logs/IndexFilesApp.txt
+logs/FileList.txt
+tesseract-ocr-3.02.deu.tar
+logs/IndexFilesApp.txt

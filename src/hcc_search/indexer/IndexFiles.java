@@ -150,6 +150,9 @@ public class IndexFiles {
    */
   static void indexDocs(IndexWriter writer, File file,  int iMaxFileSizeMB)
     throws IOException {
+      
+    /*  
+      
         String strExt = null ;
         String strClassName = null ;
         Integer iID ;
@@ -266,11 +269,7 @@ public class IndexFiles {
                                            org.apache.lucene.document.Field.Store.YES) ;
           //modifiedField.setLongValue(file.lastModified());
           doc.add(modifiedField);
-  /*        
-          NumericField sizeField = new NumericField("size");
-          modifiedField.setLongValue(file.length());
-          doc.add(sizeField);
-*/
+ 
           // Add the contents of the file to a field named "contents".  Specify a Reader,
           // so that the text of the file is tokenized and indexed, but not stored.
           // Note that FileReader expects the file to be in UTF-8 encoding.
@@ -303,5 +302,6 @@ public class IndexFiles {
         } finally {
           
         }     
+        */
   }
 }
