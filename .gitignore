@@ -84,7 +84,6 @@ dist/logs/bak/IndexFilesApp.txt
 *.class
 /build/
 *.class
-*.txt
 *.DS_Store
 *.doc
 *.lock
@@ -100,3 +99,9 @@ logs/IndexFilesApp.txt
 logs/FileList.txt
 tesseract-ocr-3.02.deu.tar
 logs/IndexFilesApp.txt
+config/includeExt.txt
+config/excludeFiles.txt
+config/excludeExt.txt
+config/bak/includeExt.txt
+config/bak/excludeFiles.txt
+config/bak/excludeExt.txt
