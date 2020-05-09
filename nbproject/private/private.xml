@@ -6,17 +6,17 @@
             <url>src/hcc_search/indexer/IndexFilesApp.java</url>
             <bookmark id="2">
                 <name/>
-                <line>309</line>
+                <line>311</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>777</line>
+                <line>794</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>887</line>
+                <line>904</line>
                 <key/>
             </bookmark>
         </file>
@@ -24,10 +24,18 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group/>
         <group name="hcc">
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/indexer/IndexFiles.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_pdfWndExtractor2020/pdfWndExtractor.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/hResult.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/testFrames/dynCall.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_miners/clsWindowedMiner.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_miners/clsTileMiner.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/testFrames/customSearch.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_pdfWndExtractor2020/clsRegions.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_miners/clsBeamMiner.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/hcc_utils.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/indexer/IndexFilesApp.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_miners/README.txt</file>
         </group>
     </open-files>
 </project-private>

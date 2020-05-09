@@ -33,32 +33,35 @@ class InvoiceRegionsDE{
         return 0 ;
     }
     
-    public int getAddressRightX(float fDocWidth){
+    public int getAddressLeftY(float fDocHeight){
+        return 0 ;
+    }    
+    
+    public float getAddressLeftWidth(float fDocWidth){
+        return fDocWidth / 2 ;
+    }
+    
+    public float getAddressLeftHeight(float fDocHeight){
+        return (fDocHeight / 3) ;
+    }
+    
+    public float getAddressRightX(float fDocWidth){
         return (int)(fDocWidth / 2) ;
     }
     
-    public int getAddressLeftY(float fDocHeight){
-        return (int)(fDocHeight / 3) ;
-    }
+    public float getAddressRightY(float fDocWidth){
+        return 0; //(int)(fDocHeight / 3) ;
+    }    
     
-    public int getAddressRightY(float fDocHeight){
-        return (int)(fDocHeight / 3) ;
-    }
-    
-    public float getAddressWidthLeft(float fDocWidth){
-        return fDocWidth / 2 ;
-    }
     /*
       Which is same, but semantically separate
     */
-    public float getAddressWidthRight(float fDocWidth){
-        return this.getAddressWidthLeft(fDocWidth) ;
-    }
-    public int getAddressHeightLeft(float fDocHeight){
-        return (int)(fDocHeight / 3) ;
+    public float getAddressRightWidth(float fDocWidth){
+        return this.getAddressLeftWidth(fDocWidth) ; //same
     }
     
-    public float getAddressHeightRight(float fDocHeight){
+    
+    public float getAddressRightHeight(float fDocHeight){
         return (int)(fDocHeight / 3) ;
     }
     
@@ -73,7 +76,7 @@ class InvoiceRegionsDE{
     }
     
     public float getSubjectY(float fDocHeight){
-        return this.getAddressHeightLeft(fDocHeight) + this.getSubjectHeight(fDocHeight) ; 
+        return this.getAddressLeftHeight(fDocHeight) + this.getSubjectHeight(fDocHeight) ; 
     }
     
     
@@ -90,15 +93,15 @@ class InvoiceRegionsDE{
         pdfArea.addRegion("AddrLeft", new java.awt.geom.Rectangle2D.Float(
                            ir.getAddressLeftX(fDocWidth), 
                            ir.getAddressLeftY(fDocHeight),
-                           ir.getAddressWidthLeft(fDocWidth),
-                           ir.getAddressHeightLeft(fDocHeight)
+                           ir.getAddressLeftWidth(fDocWidth),
+                           ir.getAddressLeftHeight(fDocHeight)
                         ));
         //Addr Right
         
          pdfArea.addRegion("AddrRight", new java.awt.geom.Rectangle2D.Float(ir.getAddressRightX(fDocWidth), 
-                           ir.getAddressRightY(fDocHeight),
-                           ir.getAddressWidthRight(fDocWidth),
-                           ir.getAddressHeightRight(fDocHeight)
+                           ir.getAddressRightY(fDocWidth),
+                           ir.getAddressRightWidth(fDocWidth),
+                           ir.getAddressRightHeight(fDocHeight)
                         ));
         //Subject
        

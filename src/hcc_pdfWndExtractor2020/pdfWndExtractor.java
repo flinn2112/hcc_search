@@ -22,7 +22,7 @@ public class pdfWndExtractor {
         System.out.println("cstor::pdfWndExtractor") ;
     }
     
-    protected float toMetric(float f72){
+    protected float PTtoMetric(float f72){
         return (float)(f72 / 72 * 25.4) ;
     }
     
@@ -65,7 +65,7 @@ public class pdfWndExtractor {
                                                                     fWidth, 
                                                                     fHeight);
             
-            clsRegions r = new clsRegions(fWidth, fHeight) ;
+            clsRegions r = new clsRegions(fDocWidth, fDocHeight) ;
             r.StdInvoiceRegions(textStripper) ;
             //textStripper.addRegion("region", rect);
             
