@@ -22,10 +22,14 @@ public class pdfWndExtractor {
         System.out.println("cstor::pdfWndExtractor") ;
     }
     
-    protected float PTtoMetric(float f72){
+    //PT to mm
+    public static float PTtoMetric(float f72){
         return (float)(f72 / 72 * 25.4) ;
     }
-    
+    //mm to PT
+    public static float MetrictoPT(float f10){
+        return (float)(f10 / 10 / 25.4 * 72 ) ;
+    }
     protected float getAddressWidthLeft(float fDocWidth){
         return (float)(fDocWidth / 2) ;
     }
@@ -51,10 +55,12 @@ public class pdfWndExtractor {
         float fDocHeight = 0f ;
         PDPage docPage = null ;
         PDDocument document = null ;
-        PDFTextStripperByArea textStripper = null ;
+        PDFTextStripperByArea textStripper1 = null ;
+        PDFTextStripperByArea textStripper2 = null ;
         try{
             document = PDDocument.load(new File(strFilename));
-            textStripper = new PDFTextStripperByArea();
+            textStripper1 = new PDFTextStripperByArea();
+            textStripper2 = new PDFTextStripperByArea();
             docPage = document.getPage(page);
             fDocWidth = docPage.getMediaBox().getWidth() ;
             //umrechnen in mm fDocWidth = fDocWidth
@@ -66,19 +72,23 @@ public class pdfWndExtractor {
                                                                     fHeight);
             
             clsRegions r = new clsRegions(fDocWidth, fDocHeight) ;
-            r.StdInvoiceRegions(textStripper) ;
+            //r.StdInvoiceRegions(textStripper) ;
+            
+            r.VBAuszugRegionsS(textStripper1) ;
+            r.VBAuszugRegionsH(textStripper2) ;
             //textStripper.addRegion("region", rect);
             
             System.out.println(fDocWidth);
             System.out.println(fDocHeight);
-            textStripper.extractRegions(docPage);
+            textStripper1.extractRegions(docPage);
+            textStripper2.extractRegions(docPage);
         }
         catch(Exception ex){
             return false ;
         }
-        String textForRegion = textStripper.getTextForRegion("AddrLeft");
-        textForRegion = textStripper.getTextForRegion("AddrRight");
-        textForRegion = textStripper.getTextForRegion("Subject");
+        String textForRegion = textStripper1.getTextForRegion("SOLL");
+        textForRegion = textStripper2.getTextForRegion("HABEN");
+        //textForRegion = textStripper.getTextForRegion("Subject");
         System.out.println(textForRegion);
         return true;
     }

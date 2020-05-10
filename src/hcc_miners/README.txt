@@ -1,4 +1,11 @@
 2020
+
+pdfBox!
+Anscheinend kann man keine Überlappenden Regionen extrahieren(Greedy)?
+Möglicherweise gibt es einen Schalter?
+Workaround: Mehrere Textstripper f. überlappende Bereiche(z.B.: Kontoauszug VB).
+
+
 Textminers
 Initially for PDF Docs, using pdfBox.
 

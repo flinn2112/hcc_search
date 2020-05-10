@@ -134,9 +134,9 @@ public class IndexFilesApp implements IConfigProcessor{
     boolean bAppendFiles = false ;    
     boolean bCreateIndex   = false ;
     
-      pdfWndExtractor pWE = null ;
+    pdfWndExtractor pWE = null ;
     pWE = new pdfWndExtractor() ;
-    pWE.extractTest("x:\\tmp\\BRN3C2AF4ADF55B_20200121_083848_000888.pdf") ; //nur Test
+    pWE.extractTest("x:\\tmp\\83275707_2020_Nr.004_Kontoauszug_vom_30.04.2020_20200509031949.pdf") ; //nur Test
     stateMonitor oStateMon = new stateMonitor( );
     
     Vector<String> vFiles = null ;

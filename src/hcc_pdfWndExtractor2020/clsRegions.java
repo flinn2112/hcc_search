@@ -27,6 +27,11 @@ class Rect{
         this.Height = Height ;
     }
 }
+
+class clsDocRegions{
+    public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){ return 0;} ;
+}
+
 class InvoiceRegionsDE{
     
     public int getAddressLeftX(float fDocWidth){
@@ -83,8 +88,7 @@ class InvoiceRegionsDE{
     
     public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){
         InvoiceRegionsDE ir = new InvoiceRegionsDE() ;
-        //ArrayList<Rectangle2D> rRect = new ArrayList<Rectangle2D>();
-        //Rect rect = null ;
+        
         int iWidth = 0 ;
         int iHeight = 0 ;
         
@@ -116,6 +120,40 @@ class InvoiceRegionsDE{
 
 }
 
+
+/*
+    Ein einfacher Versuch, die Soll/Haben Positionen zu extrahieren.
+*/
+class VBAuszugRegionsS{
+     public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){
+        float fX = 0f ;
+        fX = pdfWndExtractor.MetrictoPT(1600) ;
+         pdfArea.addRegion("SOLL", new java.awt.geom.Rectangle2D.Float(
+                           fX,                 //X
+                           0,                                               //Y
+                           100, //pdfWndExtractor.MetrictoPT(350),          //WIDTH
+                           fDocHeight                                       //HEIGHT
+                        ));         
+         return 0 ;
+     }
+}
+
+class VBAuszugRegionsH{
+     public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){
+        float fX = 0f ;
+        fX = pdfWndExtractor.MetrictoPT(1600) ;
+   
+         pdfArea.addRegion("HABEN", new java.awt.geom.Rectangle2D.Float(
+                           pdfWndExtractor.MetrictoPT(1800), 
+                           0,
+                           90, //pdfWndExtractor.MetrictoPT(500),
+                           fDocHeight
+                        ));
+         
+         return 0 ;
+     }
+}
+
 public class clsRegions {
     private float m_fDocWidth ;
     private float m_fDocHeight ;
@@ -127,5 +165,12 @@ public class clsRegions {
     
     public int StdInvoiceRegions(PDFTextStripperByArea pdfArea){
         return InvoiceRegionsDE.getRegions(pdfArea, this.m_fDocWidth, this.m_fDocHeight) ;
-    }    
+    }   
+    
+    public int VBAuszugRegionsS(PDFTextStripperByArea pdfArea) {
+        return VBAuszugRegionsS.getRegions(pdfArea, this.m_fDocWidth, this.m_fDocHeight) ;
+    } 
+    public int VBAuszugRegionsH(PDFTextStripperByArea pdfArea) {
+        return VBAuszugRegionsH.getRegions(pdfArea, this.m_fDocWidth, this.m_fDocHeight) ;
+    } 
 }
