@@ -33,7 +33,7 @@ public class customSearch{
        //testURNSearchAndHighlighting() ;
        //testContentSearchAndHighlighting() ;
        
-       so = new hcc_search_opts("versicherungsverein", "contents", "z:\\", // "x:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index",
+       so = new hcc_search_opts("mayer", "contents", "X:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index_dbg", // "x:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index",
                false, hcc_search_opts._HTML_, null, true, "highlightText" ) ;
        
        fLog.log("index.jsp.log - query.", "Index: " + so.m_strIndexDir, 0) ; 

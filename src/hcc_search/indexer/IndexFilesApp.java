@@ -36,6 +36,7 @@ import java.util.Calendar;
 
 import java.util.Date;
 import org.apache.lucene.document.FieldType;
+import org.apache.lucene.index.IndexOptions;
 import searchRT.utils.deltaMan;
 
 //1.8.3.10 - under construction
@@ -155,8 +156,6 @@ public class IndexFilesApp implements IConfigProcessor{
     m_MD5DB.workDo();  //do collect processed entries before truncating the logs.
     
     
-    strIndexPath  = "/Users/frankkempf/Documents/index";
-    strDocPath    = "/Users/frankkempf/Documents/Volume_2/SharedDownloads/Projekte";
     bCreateIndex  = false ; //true;
 
     /*
@@ -277,6 +276,9 @@ public class IndexFilesApp implements IConfigProcessor{
     IndexFilesApp.m_iTraceLevel = Integer.parseInt( (String) IndexFilesApp.m_htConfig.get("trace") );
     IndexFilesApp.m_iReorgAfter = Integer.parseInt( (String) IndexFilesApp.m_htConfig.get("reorgAfter") );
     
+    
+    
+    
     System.out.println("Index Directory [ " + strIndexPath + " ]") ;
     if( false == hcc_utils.checkPath(strIndexPath)){
         System.out.println("Index Directory [ " + strIndexPath + " ] does not exist - check path please.") ;
@@ -286,6 +288,15 @@ public class IndexFilesApp implements IConfigProcessor{
     //1.8.15.4 in case of delta indexing dirs
    //dev only 
    //IndexFilesApp.m_strDir  = "X:\\ScanRoot\\docs.allis1.com" ;
+   
+   //nur Dev/Debug
+   int iDev = 0 ;
+   if( 2112 == iDev ){
+    strIndexPath  = "X:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\index_dbg" ; //"/Users/frankkempf/Documents/index";
+    strDocPath    = "X:\\SharedDownloads\\Projekte\\hcc\\hcc_search\\documents_dbg" ; //"/Users/frankkempf/Documents/Volume_2/SharedDownloads/Projekte";
+    ifa.m_strDir  = strDocPath ;
+   }
+   
    if( 0 != ifa.m_lastModSince ){
        ifa.m_fileFilter = new fileFilter(ifa.m_lastModSince) ;
    }
@@ -543,10 +554,10 @@ public class IndexFilesApp implements IConfigProcessor{
         Field field_V50         = null ; //1.8.20.5.1
         FieldType ft    = null ; //1.8.20.5.1
         Document doc = null ;
-    
+        
         ft = new FieldType() ;                          
         ft.setStored(true) ;  //1.8.20.5.1 - gilt f. alle - werden gespeichert
-                 
+        ft.setIndexOptions(IndexOptions.DOCS);
                  
                  //1.6.11 - delta processing
                  //even though it is tiresome to have read the file to decide wether to index it,
@@ -715,6 +726,7 @@ public class IndexFilesApp implements IConfigProcessor{
         } 
          catch(Exception ex){
              System.out.println("-----indexFile-----> !!!File [" + oResult.m_strFilename + "] crashed with exception: " + ex.toString());
+             
         }
         
         finally {            
