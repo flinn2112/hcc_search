@@ -137,7 +137,8 @@ public class IndexFilesApp implements IConfigProcessor{
     
     pdfWndExtractor pWE = null ;
     pWE = new pdfWndExtractor() ;
-    pWE.extractTest("x:\\tmp\\83275707_2020_Nr.004_Kontoauszug_vom_30.04.2020_20200509031949.pdf") ; //nur Test
+    //pWE.extractTest("x:\\tmp\\83275707_2020_Nr.004_Kontoauszug_vom_30.04.2020_20200509031949.pdf") ; //nur Test
+    pWE.extractTest("x:\\tmp\\14052020_BRN3C2AF4ADF55B_20200514_064614_001466.pdf") ; //nur Test Kassenbeleg
     stateMonitor oStateMon = new stateMonitor( );
     
     Vector<String> vFiles = null ;
@@ -276,7 +277,7 @@ public class IndexFilesApp implements IConfigProcessor{
     IndexFilesApp.m_iTraceLevel = Integer.parseInt( (String) IndexFilesApp.m_htConfig.get("trace") );
     IndexFilesApp.m_iReorgAfter = Integer.parseInt( (String) IndexFilesApp.m_htConfig.get("reorgAfter") );
     
-    
+    System.out.println("Reorg set to  [ " + IndexFilesApp.m_iReorgAfter.toString() + " ]") ;
     
     
     System.out.println("Index Directory [ " + strIndexPath + " ]") ;

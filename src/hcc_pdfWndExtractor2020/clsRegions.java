@@ -155,8 +155,8 @@ class VBAuszugRegionsH{
 }
 
 public class clsRegions {
-    private float m_fDocWidth ;
-    private float m_fDocHeight ;
+    protected float m_fDocWidth ;
+    protected float m_fDocHeight ;
     
     public clsRegions(float fDocWidth, float fDocHeight){
         this.m_fDocWidth  = fDocWidth ;
@@ -174,3 +174,5 @@ public class clsRegions {
         return VBAuszugRegionsH.getRegions(pdfArea, this.m_fDocWidth, this.m_fDocHeight) ;
     } 
 }
+
+

@@ -57,10 +57,12 @@ public class pdfWndExtractor {
         PDDocument document = null ;
         PDFTextStripperByArea textStripper1 = null ;
         PDFTextStripperByArea textStripper2 = null ;
+        PDFTextStripperByArea tsCols = null ;
         try{
             document = PDDocument.load(new File(strFilename));
             textStripper1 = new PDFTextStripperByArea();
             textStripper2 = new PDFTextStripperByArea();
+            tsCols = new PDFTextStripperByArea();
             docPage = document.getPage(page);
             fDocWidth = docPage.getMediaBox().getWidth() ;
             //umrechnen in mm fDocWidth = fDocWidth
@@ -77,7 +79,8 @@ public class pdfWndExtractor {
             r.VBAuszugRegionsS(textStripper1) ;
             r.VBAuszugRegionsH(textStripper2) ;
             //textStripper.addRegion("region", rect);
-            
+            clsColumRegions.getRegions(tsCols, fDocWidth, fDocHeight, 20) ;
+            tsCols.extractRegions(docPage);
             System.out.println(fDocWidth);
             System.out.println(fDocHeight);
             textStripper1.extractRegions(docPage);
@@ -89,6 +92,23 @@ public class pdfWndExtractor {
         String textForRegion = textStripper1.getTextForRegion("SOLL");
         textForRegion = textStripper2.getTextForRegion("HABEN");
         //textForRegion = textStripper.getTextForRegion("Subject");
+        boolean bStarted = false ;
+        int iStart = 0 ;
+        int iEnd   = 0 ;
+        for(int i=0;i<20;i++){
+            textForRegion = tsCols.getTextForRegion(String.valueOf(i));
+            textForRegion = textForRegion.replace("\r\n", "") ;
+            if(false == textForRegion.isEmpty() && false == bStarted ){
+                bStarted = true ;
+                iStart = i ;
+            }
+            
+            if(textForRegion.isEmpty() && true == bStarted ){
+                iEnd = i ;
+                break ;
+            }
+        }
+        
         System.out.println(textForRegion);
         return true;
     }
