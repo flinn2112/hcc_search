@@ -6,17 +6,17 @@
             <url>src/hcc_search/indexer/IndexFilesApp.java</url>
             <bookmark id="2">
                 <name/>
-                <line>311</line>
+                <line>312</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>794</line>
+                <line>795</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>904</line>
+                <line>905</line>
                 <key/>
             </bookmark>
         </file>
@@ -25,9 +25,11 @@
         <group/>
         <group name="hcc">
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/indexer/IndexFiles.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_pdfWndExtractor2020/clsCashMemo.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_pdfWndExtractor2020/pdfWndExtractor.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/hResult.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/testFrames/dynCall.java</file>
+            <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_pdfWndExtractor2020/clsColumRegions.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_pdfWndExtractor2020/clsRegions.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_search/indexer/IndexFilesApp.java</file>
             <file>file:/X:/SharedDownloads/Projekte/hcc/hcc_search/src/hcc_miners/README.txt</file>
