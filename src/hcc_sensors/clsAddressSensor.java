@@ -11,13 +11,38 @@ import java.util.regex.Pattern;
 
 /**
  *Very Basic, just to start.
+ * strText should be a multiline String -> split it
+ * Sensors:
+ * Name in erster Zeile
+ * Strasse 2
+ * Ort 3
+ * oder alle in einer Zeile
  * @author frank
  */
 public class clsAddressSensor {
     public static int isAddress(String strText){
         int iRet = 0 ;
-        Pattern p = Pattern.compile(clsAddressDef.get(), Pattern.CASE_INSENSITIVE ) ;
-        Matcher m = p.matcher(strText) ;
+        String rStrings[] ;
+        Pattern p = null ; //
+        Matcher m = null ;
+        String strRegex = null ;
+        rStrings = strText.split("\r\n") ;
+        m = Pattern.compile(".").matcher("..."); 
+        for(int i = 0; i<rStrings.length; i++){
+            strRegex = clsAddressDef.name() ;
+            m = Pattern.compile(strRegex, Pattern.CASE_INSENSITIVE).matcher(rStrings[i]);
+            if( m.matches() ){
+                iRet++ ;
+            }
+            strRegex = clsAddressDef.street() ;
+            m = Pattern.compile(strRegex, Pattern.CASE_INSENSITIVE).matcher(rStrings[i]);
+            if( m.matches() ){
+                iRet++ ;
+            }
+        }
+        
+        
+        m = p.matcher(strText) ;
         while(m.find()){
             iRet++ ;
             /*

@@ -29,7 +29,15 @@ class Rect{
 }
 
 class clsDocRegions{
-    public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){ return 0;} ;
+    public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){ 
+         pdfArea.addRegion("ALL", new java.awt.geom.Rectangle2D.Float(
+                           0, 
+                           0,
+                           fDocWidth - 1,
+                           fDocHeight - 1
+                        ));
+        return 0;
+    } ;
 }
 
 class InvoiceRegionsDE{
@@ -162,6 +170,10 @@ public class clsRegions {
         this.m_fDocWidth  = fDocWidth ;
         this.m_fDocHeight = fDocHeight ;
     }
+    
+    public int all(PDFTextStripperByArea pdfArea){
+        return clsDocRegions.getRegions(pdfArea, this.m_fDocWidth, this.m_fDocHeight) ;
+    } 
     
     public int StdInvoiceRegions(PDFTextStripperByArea pdfArea){
         return InvoiceRegionsDE.getRegions(pdfArea, this.m_fDocWidth, this.m_fDocHeight) ;

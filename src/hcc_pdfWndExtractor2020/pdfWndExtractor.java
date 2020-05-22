@@ -5,6 +5,7 @@
  */
 package hcc_pdfWndExtractor2020;
 
+import hcc_sensors.clsAddressSensor;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -110,6 +111,54 @@ public class pdfWndExtractor {
         }
         
         System.out.println(textForRegion);
+        return true;
+    }
+    
+    
+    public boolean extractTestAddress(String strFilename){
+        int page = 0;
+        int x = 0;
+        int y = 0;
+        int width = 250 ;
+        int height = 250 ;
+        float fDocWidth  = 0f ;
+        float fDocHeight = 0f ;
+        PDPage docPage = null ;
+        String textForRegion = null ;
+        PDDocument document = null ;
+        PDFTextStripperByArea textStripper1 = null ;
+        PDFTextStripperByArea textStripper2 = null ;
+        PDFTextStripperByArea tsCols = null ;
+        try{
+            document = PDDocument.load(new File(strFilename));
+            textStripper1 = new PDFTextStripperByArea();
+            docPage = document.getPage(page);
+            fDocWidth = docPage.getMediaBox().getWidth() ;
+            //umrechnen in mm fDocWidth = fDocWidth
+            fDocHeight = docPage.getMediaBox().getHeight();
+            float fWidth = this.getAddressWidthLeft(fDocWidth) ;  
+            float fHeight = this.getAddressHeight(fDocWidth) ;  
+            
+            
+            clsRegions r = new clsRegions(fDocWidth, fDocHeight) ;
+            //r.StdInvoiceRegions(textStripper) ;
+            
+            r.all(textStripper1) ;
+            textStripper1.extractRegions(docPage);
+            //textStripper.addRegion("region", rect);
+            textForRegion = textStripper1.getTextForRegion("ALL");
+            System.out.println(textForRegion);
+            
+        }
+        catch(Exception ex){
+            return false ;
+        }
+        clsAddressSensor.isAddress(textForRegion) ;
+        
+        //textForRegion = textStripper.getTextForRegion("Subject");
+       
+        
+        
         return true;
     }
 }

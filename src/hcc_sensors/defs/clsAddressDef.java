@@ -21,19 +21,19 @@ package hcc_sensors.defs;
 */
 class clsName{
    public static String get(){
-        return "([A-Za-z\\s])+(\\s*[0-9])+"; 
+        return "([A-Za-z]\\s*)+"; 
     } 
 }
 
 class clsStreet{
    public static String get(){
-        return "([A-Za-z\\s])+(\\s*[0-9])+"; 
+        return "(([A-Za-z\\.-])+\\s*)+([0-9])+\\s+"; 
     } 
 }
 
 class clsCity{
    public static String get(){
-        return "([A-Za-z\\s])+(\\s*[0-9])+"; 
+        return "([A-Za-z]\\s*)+(\\s*[0-9])+"; 
     } 
 }
 public class clsAddressDef {
