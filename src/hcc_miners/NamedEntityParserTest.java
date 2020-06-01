@@ -36,11 +36,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.apache.tika.parser.ner.NamedEntityParser;
+import org.apache.tika.parser.ner.opennlp.OpenNLPNERecogniser;
+import org.apache.tika.parser.ner.regex.RegexNERecogniser;
 
 
 
@@ -193,25 +196,26 @@ public class NamedEntityParserTest {
 
     }
 
-    /*@Test
+    
     public void testNerChain() throws Exception {
+        InputStream is = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE) ;
     String classNames = OpenNLPNERecogniser.class.getName()
             + "," + RegexNERecogniser.class.getName();
     System.setProperty(NamedEntityParser.SYS_PROP_NER_IMPL, classNames);
-    TikaConfig config = new TikaConfig(getClass().getResourceAsStream(CONFIG_FILE));
+    TikaConfig config = new TikaConfig(is);
     Tika tika = new Tika(config);
     String text = "University of Southern California (USC), is located in Los Angeles ." +
             " Campus is busy from monday to saturday";
     Metadata md = new Metadata();
     tika.parse(new ByteArrayInputStream(text.getBytes(Charset.defaultCharset())), md);
-    HashSet<String> keys = new HashSet<String>(Arrays.asList(md.getValues("NER_WEEK_DAY")));
+    HashSet<String> keys = new HashSet<String>(Arrays.asList(md.getValues("NER_WEEK_DAY"))); //NER_LOCATION
     System.out.println(keys);
-    assumeTrue(keys.contains("monday"));
+    
         
     keys.clear();
     keys.addAll(Arrays.asList(md.getValues("NER_LOCATION")));
     System.out.println(keys);
-    assumeTrue(keys.contains("Los Angeles"));
+    
         
-     }*/
+     }
 }

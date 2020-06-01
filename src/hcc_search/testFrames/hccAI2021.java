@@ -9,7 +9,8 @@ import hcc_miners.NamedEntityParserTest;
 import hcc_pdfWndExtractor2020.pdfWndExtractor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import searchRT.utils.excludedFiles;
+//import org.apache.commons.text.StringEscapeUtils;
 /**
  *
  * @author frank
@@ -24,8 +25,23 @@ public class hccAI2021 {
         Pattern p = null ; //
         Matcher m = null ;
         NamedEntityParserTest ner = new NamedEntityParserTest() ;
+        String strVal = "*.*, + (xxx)";
+        String strChars =  "<([{\\^-=$!|]})?*+.>" ;
+        //rChars = "<([{\\^-=$!|]})?*+.>" ;
+        char[] rChars = strChars.toCharArray();
+        for(int i = 0; i<strChars.length();i++){
+            String strX = String.valueOf(strChars.charAt(i)) ;
+            strVal.indexOf(strChars.charAt(i)) ;
+            
+            strVal = strVal.replace(strX, "\\" + strX);
+        }
+        System.out.println(strVal);
+        //<([{\^-=$!|]})?*+.>
+        Pattern  pattern = Pattern.compile(strVal) ;//Crash Test 
+        
         try{
-            ner.testParse(); 
+            //ner.testParse(); 
+            ner.testNerChain();
         }catch(Exception ex){
             System.err.println(ex.toString()) ;
         }

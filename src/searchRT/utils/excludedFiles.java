@@ -37,6 +37,8 @@ public class excludedFiles {
       Pattern pattern = null ;
       String strVal = null ;
       Boolean bFound = false ;
+      String strChars =  "<([{\\^-=$!|]})?*+.>" ; //1.20.5.20
+      char[] rChars = strChars.toCharArray();  //1.20.5.20
       if(null == excludedFiles.sHT_Excluded ) return false ;
       if( excludedFiles.sHT_Excluded.isEmpty()  ) return false ;
       if( null == strFilename ) return false ;
@@ -56,6 +58,12 @@ public class excludedFiles {
     //Displaying Key and value pairs
     while (itr.hasNext()) { 
         strVal = itr.next();
+         //1.20.5.20 - Escape Metas
+        for(int i = 0; i<strChars.length();i++){
+            String strX = String.valueOf(strChars.charAt(i)) ;
+            strVal.indexOf(strChars.charAt(i)) ;            
+            strVal = strVal.replace(strX, "\\" + strX);
+        }
         pattern = Pattern.compile(strVal) ;
         Matcher matcher = pattern.matcher(strFilename) ;
          bFound = matcher.find() ;

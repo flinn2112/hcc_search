@@ -607,7 +607,7 @@ public class IndexFilesApp implements IConfigProcessor{
                           */
                           doc.add(field_V50) ;
                           strTmp = String.valueOf(oResult.m_lFileLength ) ;
-                          field_V50 = new Field("checksum", strTmp, ft);  
+                          field_V50 = new Field("filesize", strTmp, ft);  
                           doc.add(field_V50);
                           /*
                           doc.add(new Field("filesize", 
