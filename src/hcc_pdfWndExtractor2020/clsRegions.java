@@ -4,10 +4,12 @@
  */
 package hcc_pdfWndExtractor2020;
 
+import hcc_abstract.pdfBox;
 import java.awt.geom.Rectangle2D;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
 import java.util.ArrayList;
-
+import java.util.Hashtable;
+import java.util.List;
 /**
  *
  * @author frank
@@ -29,6 +31,23 @@ class Rect{
 }
 
 class clsDocRegions{
+    private hcc_abstract.pdfBox m_pdf = null ;
+    
+    public clsDocRegions(){
+        m_pdf = new pdfBox(1) ;
+    }
+    public void xxx(){
+        List lRegions = m_pdf.getRegions() ;
+        String strRegionName = null ;
+        String textForRegion = null ;
+        Hashtable dict = new Hashtable();
+        ArrayList rTexts = new ArrayList() ;
+        for (Object element : lRegions) {
+            strRegionName = (String)element;
+            textForRegion = m_pdf.getTextForRegion(strRegionName);
+            dict.put(strRegionName, textForRegion) ;
+        }
+    }
     public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){ 
          pdfArea.addRegion("ALL", new java.awt.geom.Rectangle2D.Float(
                            0, 
@@ -40,7 +59,7 @@ class clsDocRegions{
     } ;
 }
 
-class InvoiceRegionsDE{
+class InvoiceRegionsDE extends clsDocRegions{
     
     public int getAddressLeftX(float fDocWidth){
         return 0 ;
@@ -91,9 +110,21 @@ class InvoiceRegionsDE{
     public float getSubjectY(float fDocHeight){
         return this.getAddressLeftHeight(fDocHeight) + this.getSubjectHeight(fDocHeight) ; 
     }
+    public float getFooterX(float fDocWidth){
+        return 0; 
+    }
     
+    //ein DINA4 Blatt ist 30 cm oder etwa 12 Inch also, nehmen wir das letzte Zehntel - etwa 3 cm
+    public float getFooterY(float fDocHeight){
+        return (int)(fDocHeight / 10 * 9) ;
+    }  
     
-    
+    public float getFooterHeight(float fDocHeight){
+        return (int)(fDocHeight - this.getFooterY(fDocHeight)) ;
+    } 
+    public float getFooterWidth(float fDocWidth){
+        return (int)(fDocWidth) ;
+    } 
     public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){
         InvoiceRegionsDE ir = new InvoiceRegionsDE() ;
         
@@ -122,7 +153,11 @@ class InvoiceRegionsDE{
                            ir.getSubjectWidth(fDocWidth),
                            ir.getSubjectHeight(fDocHeight)
                         ));
-         
+        pdfArea.addRegion("Footer", new java.awt.geom.Rectangle2D.Float(ir.getFooterX(fDocWidth), 
+                           ir.getFooterY(fDocHeight),
+                           ir.getFooterWidth(fDocWidth),
+                           ir.getFooterHeight(fDocHeight)
+                        )); 
         return 0 ;        
     } 
 

@@ -8,10 +8,13 @@ package hcc_pdfWndExtractor2020;
 import hcc_sensors.clsAddressSensor;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
-
+import com.google.gson.* ;
+import java.util.ArrayList;
+import java.util.Hashtable;
 /**
  *
  * @author frank
@@ -44,6 +47,63 @@ public class pdfWndExtractor {
         return (float)(fDocHeight / 3) ;
     }
    
+     /*
+     01062020 Test Invoice Regions
+     */
+     public boolean extractTestInvoice(String strFilename){         
+        int page = 0;
+        int x = 0;
+        int y = 0;
+        int width = 250 ;
+        int height = 250 ;
+        float fDocWidth  = 0f ;
+        float fDocHeight = 0f ;
+        PDPage docPage = null ;
+        PDDocument document = null ;        
+        PDFTextStripperByArea textStripper1 = null ;
+        String strRegionName = null ;
+        
+        try{
+            document = PDDocument.load(new File(strFilename));
+            textStripper1 = new PDFTextStripperByArea();
+            docPage = document.getPage(page);
+            fDocWidth = docPage.getMediaBox().getWidth() ;
+            //umrechnen in mm fDocWidth = fDocWidth
+            fDocHeight = docPage.getMediaBox().getHeight();
+            float fWidth = this.getAddressWidthLeft(fDocWidth) ;  
+            float fHeight = this.getAddressHeight(fDocWidth) ;  
+            Rectangle2D rect = new java.awt.geom.Rectangle2D.Float(x, y, 
+                                                                    fWidth, 
+                                                                    fHeight);
+            
+            clsRegions r = new clsRegions(fDocWidth, fDocHeight) ;
+            //r.StdInvoiceRegions(textStripper) ;
+            
+            r.StdInvoiceRegions(textStripper1) ;
+            System.out.println(fDocWidth);
+            System.out.println(fDocHeight);
+            textStripper1.extractRegions(docPage);
+        }
+        catch(Exception ex){
+            return false ;
+        }
+        String textForRegion = null ;
+        
+        List lRegions = textStripper1.getRegions() ;
+        Hashtable dict = new Hashtable();
+        ArrayList rTexts = new ArrayList() ;
+        for (Object element : lRegions) {
+            strRegionName = (String)element;
+            textForRegion = textStripper1.getTextForRegion(strRegionName);
+            dict.put(strRegionName, textForRegion) ;
+        }
+        Gson gson = new Gson();
+        
+        String strJson = gson.toJson(dict);
+        
+        System.out.println(textForRegion);
+        return true;
+     }
      
     
     public boolean extractTest(String strFilename){
