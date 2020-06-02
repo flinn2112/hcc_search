@@ -60,36 +60,22 @@ public class pdfWndExtractor {
         float fDocHeight = 0f ;
         PDPage docPage = null ;
         PDDocument document = null ;        
-        PDFTextStripperByArea textStripper1 = null ;
         String strRegionName = null ;
         
         try{
-            document = PDDocument.load(new File(strFilename));
-            textStripper1 = new PDFTextStripperByArea();
-            docPage = document.getPage(page);
-            fDocWidth = docPage.getMediaBox().getWidth() ;
-            //umrechnen in mm fDocWidth = fDocWidth
-            fDocHeight = docPage.getMediaBox().getHeight();
-            float fWidth = this.getAddressWidthLeft(fDocWidth) ;  
-            float fHeight = this.getAddressHeight(fDocWidth) ;  
-            Rectangle2D rect = new java.awt.geom.Rectangle2D.Float(x, y, 
-                                                                    fWidth, 
-                                                                    fHeight);
             
-            clsRegions r = new clsRegions(fDocWidth, fDocHeight) ;
+            
+            InvoiceRegionsDE r = new InvoiceRegionsDE() ;
             //r.StdInvoiceRegions(textStripper) ;
-            
-            r.StdInvoiceRegions(textStripper1) ;
-            System.out.println(fDocWidth);
-            System.out.println(fDocHeight);
-            textStripper1.extractRegions(docPage);
+            r.createRegions(strFilename, 0);           
+            r.process() ;
         }
         catch(Exception ex){
             return false ;
         }
         String textForRegion = null ;
         
-        List lRegions = textStripper1.getRegions() ;
+        List lRegions = r.getRegions() ;
         Hashtable dict = new Hashtable();
         ArrayList rTexts = new ArrayList() ;
         for (Object element : lRegions) {

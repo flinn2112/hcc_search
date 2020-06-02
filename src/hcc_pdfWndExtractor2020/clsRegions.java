@@ -31,20 +31,21 @@ class Rect{
 }
 
 class clsDocRegions{
-    private hcc_abstract.pdfBox m_pdf = null ;
+    public hcc_abstract.pdfBox m_pdf = null ;
     
     public clsDocRegions(){
-        m_pdf = new pdfBox(1) ;
+        
     }
-    public void xxx(){
-        List lRegions = m_pdf.getRegions() ;
-        String strRegionName = null ;
-        String textForRegion = null ;
+   
+    public boolean process(){
+        return this.m_pdf.extractRegions() ;
+    }
+    public Hashtable getTexts(){
         Hashtable dict = new Hashtable();
         ArrayList rTexts = new ArrayList() ;
         for (Object element : lRegions) {
             strRegionName = (String)element;
-            textForRegion = m_pdf.getTextForRegion(strRegionName);
+            textForRegion = textStripper1.getTextForRegion(strRegionName);
             dict.put(strRegionName, textForRegion) ;
         }
     }
@@ -60,6 +61,10 @@ class clsDocRegions{
 }
 
 class InvoiceRegionsDE extends clsDocRegions{
+    
+    public InvoiceRegionsDE(){        
+        
+    }
     
     public int getAddressLeftX(float fDocWidth){
         return 0 ;
@@ -125,38 +130,39 @@ class InvoiceRegionsDE extends clsDocRegions{
     public float getFooterWidth(float fDocWidth){
         return (int)(fDocWidth) ;
     } 
-    public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){
-        InvoiceRegionsDE ir = new InvoiceRegionsDE() ;
+    public int createRegions(String strFilename, int iPageNum){
+        this.m_pdf = new pdfBox(strFilename, 0, 2) ;
+        
         
         int iWidth = 0 ;
         int iHeight = 0 ;
         
         //Address Left
        
-        pdfArea.addRegion("AddrLeft", new java.awt.geom.Rectangle2D.Float(
-                           ir.getAddressLeftX(fDocWidth), 
-                           ir.getAddressLeftY(fDocHeight),
-                           ir.getAddressLeftWidth(fDocWidth),
-                           ir.getAddressLeftHeight(fDocHeight)
+        this.m_pdf.addRegion(0, "AddrLeft", new java.awt.geom.Rectangle2D.Float(
+                           this.getAddressLeftX(this.m_pdf.m_fDocWidth), 
+                           this.getAddressLeftY(this.m_pdf.m_fDocHeight),
+                           this.getAddressLeftWidth(this.m_pdf.m_fDocWidth),
+                           this.getAddressLeftHeight(this.m_pdf.m_fDocHeight)
                         ));
         //Addr Right
         
-         pdfArea.addRegion("AddrRight", new java.awt.geom.Rectangle2D.Float(ir.getAddressRightX(fDocWidth), 
-                           ir.getAddressRightY(fDocWidth),
-                           ir.getAddressRightWidth(fDocWidth),
-                           ir.getAddressRightHeight(fDocHeight)
+         this.m_pdf.addRegion(0, "AddrRight", new java.awt.geom.Rectangle2D.Float(this.getAddressRightX(this.m_pdf.m_fDocWidth), 
+                           this.getAddressRightY(this.m_pdf.m_fDocWidth),
+                           this.getAddressRightWidth(this.m_pdf.m_fDocWidth),
+                           this.getAddressRightHeight(this.m_pdf.m_fDocHeight)
                         ));
-        //Subject
+        //Subject muss in einen anderen Stripper
        
-         pdfArea.addRegion("Subject", new java.awt.geom.Rectangle2D.Float(ir.getSubjectX(fDocWidth), 
-                           ir.getSubjectY(fDocHeight),
-                           ir.getSubjectWidth(fDocWidth),
-                           ir.getSubjectHeight(fDocHeight)
+         this.m_pdf.addRegion(1, "Subject", new java.awt.geom.Rectangle2D.Float(this.getSubjectX(this.m_pdf.m_fDocWidth), 
+                           this.getSubjectY(this.m_pdf.m_fDocHeight),
+                           this.getSubjectWidth(this.m_pdf.m_fDocWidth),
+                           this.getSubjectHeight(this.m_pdf.m_fDocHeight)
                         ));
-        pdfArea.addRegion("Footer", new java.awt.geom.Rectangle2D.Float(ir.getFooterX(fDocWidth), 
-                           ir.getFooterY(fDocHeight),
-                           ir.getFooterWidth(fDocWidth),
-                           ir.getFooterHeight(fDocHeight)
+        this.m_pdf.addRegion(1, "Footer", new java.awt.geom.Rectangle2D.Float(this.getFooterX(this.m_pdf.m_fDocWidth), 
+                           this.getFooterY(this.m_pdf.m_fDocHeight),
+                           this.getFooterWidth(this.m_pdf.m_fDocWidth),
+                           this.getFooterHeight(this.m_pdf.m_fDocHeight)
                         )); 
         return 0 ;        
     } 
