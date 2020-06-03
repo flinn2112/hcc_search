@@ -34,6 +34,7 @@ public class pdfBox {
         hoher Aufwand - deshalb hier als Parameter.
     */
     public pdfBox(String strFilename, int iPageNum, int iNumStrippers){
+        
         try{
             this.m_Document = PDDocument.load(new File(strFilename));
             if( null != this.m_Document ){
@@ -43,7 +44,10 @@ public class pdfBox {
                 this.m_fDocWidth  = this.m_DocPage.getMediaBox().getWidth() ;            
                 this.m_fDocHeight = this.m_DocPage.getMediaBox().getHeight();
             }
-            
+            this.m_rTxtStrippers = new PDFTextStripperByArea[iNumStrippers] ;
+            for( int i = 0 ; i < iNumStrippers ; i++){
+                this.m_rTxtStrippers[i] = new PDFTextStripperByArea() ;
+            }
             
         }catch(Exception ex){
             
@@ -70,7 +74,11 @@ public class pdfBox {
     public String getTextForRegion(String strRegionName){
         String strRet = null ;
         for(int i = 0; i < this.m_rTxtStrippers.length;i++){
-            strRet = this.m_rTxtStrippers[i].getTextForRegion(strRegionName) ;
+            try{
+                strRet = this.m_rTxtStrippers[i].getTextForRegion(strRegionName) ;
+            }catch(Exception ex){
+                continue ;
+            }            
             if( null != strRet ){
                 break ;
             }

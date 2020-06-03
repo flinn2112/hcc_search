@@ -61,11 +61,8 @@ public class pdfWndExtractor {
         PDPage docPage = null ;
         PDDocument document = null ;        
         String strRegionName = null ;
-        
+        InvoiceRegionsDE r = new InvoiceRegionsDE() ;
         try{
-            
-            
-            InvoiceRegionsDE r = new InvoiceRegionsDE() ;
             //r.StdInvoiceRegions(textStripper) ;
             r.createRegions(strFilename, 0);           
             r.process() ;
@@ -73,21 +70,15 @@ public class pdfWndExtractor {
         catch(Exception ex){
             return false ;
         }
-        String textForRegion = null ;
+       
         
-        List lRegions = r.getRegions() ;
-        Hashtable dict = new Hashtable();
-        ArrayList rTexts = new ArrayList() ;
-        for (Object element : lRegions) {
-            strRegionName = (String)element;
-            textForRegion = textStripper1.getTextForRegion(strRegionName);
-            dict.put(strRegionName, textForRegion) ;
-        }
+        Hashtable dict = r.getTexts() ;
+       
         Gson gson = new Gson();
         
         String strJson = gson.toJson(dict);
         
-        System.out.println(textForRegion);
+        //System.out.println(textForRegion);
         return true;
      }
      

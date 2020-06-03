@@ -40,15 +40,7 @@ class clsDocRegions{
     public boolean process(){
         return this.m_pdf.extractRegions() ;
     }
-    public Hashtable getTexts(){
-        Hashtable dict = new Hashtable();
-        ArrayList rTexts = new ArrayList() ;
-        for (Object element : lRegions) {
-            strRegionName = (String)element;
-            textForRegion = textStripper1.getTextForRegion(strRegionName);
-            dict.put(strRegionName, textForRegion) ;
-        }
-    }
+  
     public static int getRegions(PDFTextStripperByArea pdfArea, float fDocWidth, float fDocHeight){ 
          pdfArea.addRegion("ALL", new java.awt.geom.Rectangle2D.Float(
                            0, 
@@ -102,19 +94,23 @@ class InvoiceRegionsDE extends clsDocRegions{
         return (int)(fDocHeight / 3) ;
     }
     
-    public float getSubjectX(float fDocHeight){
+    public float getSubjectX(float fDocWidth){
         return 0 ;
     }
-    public float getSubjectWidth(float fDocHeight){
-       return (int)fDocHeight ;
+    //Subject kann sich mit Adresse überlagern
+    //Ein DINA4 ist üblicherweise in drei Teile gefaltet. Subject sollte am Ende des ersten Drittels stehen
+    //Höhe ist etwa 842 Einheiten, also sollte man etwa bei 300 - 100 = 200 rauskommen.
+    public float getSubjectY(float fDocHeight){
+        return ( fDocHeight * 3 / 11 ) ; //ein Zehntel wäre bisschen zu wenig. 1/4 ist zu hoch 1/3 zu tief
+    }
+    public float getSubjectWidth(float fDocWidth){
+       return (int)fDocWidth ;
     }
     public float getSubjectHeight(float fDocHeight){
-       return (int)fDocHeight / 10 ;  //just an approximation, would be 30 mm on DINA4
+       return (int)fDocHeight / 5 ;  //just an approximation, would be 30 mm on DINA4
     }
     
-    public float getSubjectY(float fDocHeight){
-        return this.getAddressLeftHeight(fDocHeight) + this.getSubjectHeight(fDocHeight) ; 
-    }
+    
     public float getFooterX(float fDocWidth){
         return 0; 
     }
@@ -130,9 +126,13 @@ class InvoiceRegionsDE extends clsDocRegions{
     public float getFooterWidth(float fDocWidth){
         return (int)(fDocWidth) ;
     } 
+    
+    public Hashtable getTexts(){
+        return this.m_pdf.getTexts() ;
+    }
+    
     public int createRegions(String strFilename, int iPageNum){
-        this.m_pdf = new pdfBox(strFilename, 0, 2) ;
-        
+        this.m_pdf = new pdfBox(strFilename, 0, 2) ;        
         
         int iWidth = 0 ;
         int iHeight = 0 ;
