@@ -7,6 +7,8 @@ package hcc_search.logger;
 import hcc_search.hcc_utils;
 import java.io.*;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -114,6 +116,10 @@ public class fileLogger implements ILogger {
         sb.append("\r\n") ;
         this.log(sb.toString());        
     } 
+    
+    public static String mkFilename(String strPrefix){
+        return strPrefix + new SimpleDateFormat("yyyyMMddHHmm'.txt'").format(new Date());
+    }
     
     public static String md5(String strContent){   
         MessageDigest m = null ;

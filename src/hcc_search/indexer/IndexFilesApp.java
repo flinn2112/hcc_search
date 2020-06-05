@@ -114,6 +114,7 @@ public class IndexFilesApp implements IConfigProcessor{
     static simpleLogger m_FileListLog = null ;
     static simpleLogger m_FileExcludeLog = null ;
     static MD5DB  m_MD5DB  ;
+    static boolean bWndXTOnly    = false ;
     //1.8.4.15 -flag for deltaIndex -> force indexing of changed files
     static boolean m_bForceUpdate = false ; //default is false
     public String m_strDir = null ;  //1.8.4.15 delta directory
@@ -128,12 +129,13 @@ public class IndexFilesApp implements IConfigProcessor{
   /** Index all text files under a directory. */
   public static void main(String[] args) {
     String usage = "java -jar hcc_search.jar"
-                 + " [-deltaDir PATH] [-lastMod Number(in Days)] [-forceUpd (update Content even if present)] \n\n";
+                 + " [-deltaDir PATH] [-lastMod Number(in Days)] [-forceUpd (update Content even if present)] [-AIProcessOnly 0/1 (run Windowextractor only, no indexing)]\n\n";
     String strIndexPath   = null ;
     String strDocPath     = null ;
     String strConfigPath  = null ;
-    boolean bAppendFiles = false ;    
-    boolean bCreateIndex   = false ;
+    boolean bAppendFiles  = false ;    
+    boolean bCreateIndex  = false ;
+    
     
     pdfWndExtractor pWE = null ;
     pWE = new pdfWndExtractor() ;
@@ -171,34 +173,44 @@ public class IndexFilesApp implements IConfigProcessor{
           System.out.println(usage); 
           return ;
       }   
-        
+      
+      
+      if ("-AIProcessOnly".equals(args[i])) {
+        IndexFilesApp.bWndXTOnly = true ;        
+      }     
         
       if ("-index".equals(args[i])) {
         strIndexPath = args[i+1];
-        i++;
+        
       } else if ("-docs".equals(args[i])) {
         strDocPath = args[i+1];
-        i++;
+        
       } else if ("-update".equals(args[i])) {
         bCreateIndex = false;
+        
       }
        else if ("-forceUpd".equals(args[i])) {//1.8.4.15
         IndexFilesApp.m_bForceUpdate = true ;
+        i++ ;
       }
        else if ("-deltaDir".equals(args[i])) {//1.8.4.15 index this directory only
         ifa.m_strDir =  args[i+1] ;
+        
       }
        else if ("-lastMod".equals(args[i])) {//1.8.4.15 index this directory only
         ifa.m_lastModSince =  Integer.parseInt(args[i+1]) ;
+        
       }
       else if ("-cfg".equals(args[i])) {
         System.out.println("Argument  cfg is set  [" + args[i+1] + "]") ;
         strConfigPath = args[i+1];
+        
       }
       if ("-delta".equals(args[i])){//use only files that where added recently
           System.out.println("Argument  delta is set  [" + args[i+1] + "]") ;
           bAppendFiles = true ;
           IndexFilesApp.m_bUpdateFileDelta = true ;
+          
       }
     }
   
@@ -325,15 +337,15 @@ public class IndexFilesApp implements IConfigProcessor{
         //System.out.println("Vector Element "+i+" :"+a.m_VFiles.get(i));
         //processFile(writer, new File(ifa.m_VFiles.get(i).toString())) ;
         //last parameter is close Index -> last thread should close
-        dT = new dextorT( strIndexPath, false, 5000L, (i == ifa.m_VFiles.size() - 1 ), oStateMon ) ; //Arg #3: closes Index when loop reached vector size
+        dT = new dextorT( strIndexPath, false, 5000L, (i == ifa.m_VFiles.size() - 1 ), oStateMon, IndexFilesApp.bWndXTOnly ) ; //Arg #3: closes Index when loop reached vector size
         
         vTmp.add(ifa.m_VFiles.get(i)) ;  //copy over
         //if(  i > 0 && vTmp.size() % iMaxDocs == 0 ){
         dT.m_VFiles = vTmp ;
         
-/* only for local debug without threads
-        */
+
 /*
+        only for local debug without threads
         try {            
             dT.processFiles() ;
         } catch (Exception ex) {
@@ -399,43 +411,9 @@ public class IndexFilesApp implements IConfigProcessor{
         System.out.println("<----------------  IndexFilesApp  Main closing index.");
         dT.closeDex();
     }
-          //At end the index must be closed.
+          //At end the index must be closed.    
     
-    //maybe there is a remainder.
- /*
-    if( true ==  vTmp.isEmpty() ){
-        if( null != dT )
-            dT.closeDex();  //At end the index must be closed.
-        return ;
-    }
-    
- this code was eliminated 2/2015 - it should not happen to have a remainder.    
-    //go ahead
-    dT = new dextorT( strIndexPath, bCreateIndex, 500L ) ;
-    dT.m_VFiles = vTmp ;
-    
-    //nur Test f. Debug
-   //set 2112 into iChk to process files without starting a thread - only for dev
-    if( 2112 == iChk )
-        dT.processFiles() ;    
-    
-    
-    dT.start();
-    try{
-        dT.join(m_lThreadTimeout);
-        if( dT.isAlive()){
-            dT.interrupt() ;
-            System.out.println("Thread runs longer than [" + m_lThreadTimeout + "] - stopped.") ;
-        }
-        
-    }
-    catch (java.lang.InterruptedException e){
-        
-    }   
-    finally{
-        dT.closeDex();  //At end the index must be closed.
-    }
-  */ 
+
   }
  
   //objectname can be a filename or dir
@@ -829,15 +807,18 @@ class dextorT extends Thread{
     public boolean         m_bCloseIdxIndicator = false ;    
     public static Indexer  m_Indexer = null ;
     private stateMonitor   m_sMon    = null ;
+    private boolean        m_bAIExtractOnly = false ; //2020 - Extract only AI Regions
     
     public dextorT( String strIndexPath, boolean bCreateIndex, 
-        Long lReorgAfterNumFiles, boolean bCloseDex, stateMonitor oSMon){
+        Long lReorgAfterNumFiles, boolean bCloseDex, stateMonitor oSMon, boolean bAIExtractOnly){
         m_VFiles       = null ; 
         m_strPath = strIndexPath ;
         m_bCloseIdxIndicator = bCloseDex ;
         m_sMon = oSMon ;
+        m_bAIExtractOnly = bAIExtractOnly ;
         dextorT.m_lTotalFiles  = 0L ;
         dextorT.m_lReorgAfter = lReorgAfterNumFiles ;
+        
         if( null == dextorT.m_Indexer ){  //Singleton
             System.out.println("dextorT: !----------------> indexer --------   o p e n i n g... ");
             dextorT.m_Indexer  = new Indexer(strIndexPath,  bCreateIndex, IndexFilesApp.m_iTraceLevel );
@@ -886,7 +867,12 @@ class dextorT extends Thread{
     
     public void run(){
         try{
-            this.processFiles() ;
+            if( this.m_bAIExtractOnly ){ //2020
+                this.processRegions() ;
+            }
+            else{
+                this.processFiles() ;
+            }
         }
         catch(Exception ex){
             System.out.println("###############run::processFiles error - Exception occured! ############" + ex.getMessage());
@@ -985,6 +971,23 @@ class dextorT extends Thread{
             throw new IOException( ex.toString() ) ;
         }        
     }
+    /*
+        2020 AI Region Extractor (experimental)
+    */
+    public void processRegions() throws java.nio.channels.ClosedByInterruptException, Exception{
+        pdfWndExtractor wndExT = new pdfWndExtractor() ;
+        for(int i=0;i<this.m_VFiles.size();i++){
+            m_lCurrentFile++ ;
+            if( IndexFilesApp.m_iTraceLevel > 2 )
+                System.out.println("processRegions: Vector Element "+ i +" :" + this.m_VFiles.get(i));
+            try{
+                wndExT.extractRegions(this.m_VFiles.get(i).toString()) ;                
+            }catch( Exception ex){
+                throw ex ; 
+            }
+        }
+    
+    }
     
     public void processFiles() throws java.nio.channels.ClosedByInterruptException, Exception{    
         
@@ -1004,57 +1007,5 @@ class dextorT extends Thread{
             }
         }
     }
- /*       
-    public void processFiles(){    
-        final File docDir = new File(m_strDocPath);
-        if (!docDir.exists() || !docDir.canRead()) {
-          System.out.println("Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
-          System.exit(1);
-        }
-       
-        
-        IndexWriter writer = this.openIndex() ;
-        if( null == writer) return ;  //MORE HANDLING!!!
-        
-        //processFile(new File(v.get(i).toString())) ;
-        
-        
-    
-    Date start = new Date();
-    try {
-      System.out.println("Indexing to directory '" + m_strIndexPath + "'...");
 
-      Directory dir = FSDirectory.open(new File(m_strIndexPath));
-
-
-      // Optional: for better indexing performance, if you
-      // are indexing many documents, increase the RAM
-      // buffer.  But if you do this, increase the max heap
-      // size to the JVM (eg add -Xmx512m or -Xmx1g):
-      //
-      // iwc.setRAMBufferSizeMB(256.0);
-
-     
-     // IndexFilesApp.indexDocs(writer, docDir, 5);
-
-      // NOTE: if you want to maximize search performance,
-      // you can optionally call optimize here.  This can be
-      // a costly operation, so generally it's only worth
-      // it when your index is relatively static (ie you're
-      // done adding documents to it):
-      //
-      // writer.optimize();
-
-      writer.close();
-
-      Date end = new Date();
-      System.out.println(end.getTime() - start.getTime() + " total milliseconds");
-
-    } catch (IOException e) {
-      System.out.println(" caught a " + e.getClass() +
-       "\n with message: " + e.getMessage());
-    }
-    
-    }
-   */
 }

@@ -8,12 +8,13 @@ package hcc_pdfWndExtractor2020;
 import hcc_sensors.clsAddressSensor;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
 import com.google.gson.* ;
-import java.util.ArrayList;
+import hcc_search.hcc_utils;
+import hcc_search.logger.fileLogger;
+import java.io.IOException;
 import java.util.Hashtable;
 /**
  *
@@ -24,6 +25,18 @@ import java.util.Hashtable;
 public class pdfWndExtractor {
     public pdfWndExtractor(){
         System.out.println("cstor::pdfWndExtractor") ;
+    }
+    
+    public static IDocRegions extractorFactory(int iObjectType){
+        clsDocRegions oRegions = null ;
+        switch(iObjectType)
+		{
+                        case clsRegions.RTYPE_INVOICE:
+                            oRegions = new InvoiceRegionsDE() ;
+                            break ;
+        }
+        
+        return oRegions ;
     }
     
     //PT to mm
@@ -50,7 +63,7 @@ public class pdfWndExtractor {
      /*
      01062020 Test Invoice Regions
      */
-     public boolean extractTestInvoice(String strFilename){         
+     public boolean extractRegions(String strFilename){         
         int page = 0;
         int x = 0;
         int y = 0;
@@ -61,10 +74,15 @@ public class pdfWndExtractor {
         PDPage docPage = null ;
         PDDocument document = null ;        
         String strRegionName = null ;
-        InvoiceRegionsDE r = new InvoiceRegionsDE() ;
+        
+        if( false == hcc_utils.isPDF(strFilename)){
+            return false ;
+        }
+        
+        IDocRegions r = pdfWndExtractor.extractorFactory(clsRegions.RTYPE_INVOICE) ;//new InvoiceRegionsDE() ;
         try{
             //r.StdInvoiceRegions(textStripper) ;
-            r.createRegions(strFilename, 0);           
+            r.createRegions(strFilename, 0);     
             r.process() ;
         }
         catch(Exception ex){
@@ -73,11 +91,19 @@ public class pdfWndExtractor {
        
         
         Hashtable dict = r.getTexts() ;
+        Hashtable htClosure = new Hashtable() ;
+        htClosure.put("RECHNUNG", dict) ;
+        htClosure.put("LIEFERSCHEIN", "noch nicht implementiert.") ;
        
         Gson gson = new Gson();
         
-        String strJson = gson.toJson(dict);
-        
+        String strJson = gson.toJson(htClosure);
+        try{
+             r.serialize("AIBridge", hcc_utils.base64encode(strFilename), strJson) ; //mkFilename("hccAI_")
+        }catch(IOException ex){
+            System.err.println(ex.toString());
+        }
+       
         //System.out.println(textForRegion);
         return true;
      }

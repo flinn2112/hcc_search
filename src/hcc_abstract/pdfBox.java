@@ -5,7 +5,9 @@
  */
 package hcc_abstract;
 
+import hcc_search.hcc_utils;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -27,13 +29,18 @@ public class pdfBox {
     public float m_fDocWidth     = 0 ; 
     public float m_fDocHeight    = 0 ; 
     public PDFTextStripperByArea[] m_rTxtStrippers = null ;
+    private String m_strPath = null ;
     
     /*
         noch schöner, aber viel mehr Aufwand wäre es, wenn die Klasse selber erkennen würde,
         dass mehrere Stripper gebraucht werden - dazu müssten aber alle Areas auf Kollisionen getestet werden - 
         hoher Aufwand - deshalb hier als Parameter.
     */
-    public pdfBox(String strFilename, int iPageNum, int iNumStrippers){
+    public pdfBox(String strFilename, int iPageNum, int iNumStrippers) throws Exception{
+        this.m_strPath = strFilename ;
+        if( false == hcc_utils.isPDF(strFilename) ){
+            throw new Exception(strFilename + " seems to be not a PDF.") ;
+        }
         
         try{
             this.m_Document = PDDocument.load(new File(strFilename));
@@ -50,16 +57,19 @@ public class pdfBox {
             }
             
         }catch(Exception ex){
-            
+            this.m_rTxtStrippers = null ;
+            //nicht behandeln - Objekte sind null
         }
         
     }
+    
     public Hashtable getTexts(){
         Hashtable dict = new Hashtable();
         ArrayList rTexts = new ArrayList() ;
         List lRegions = this.getRegions() ; //IDs der Regionen
         String strRegionName = null ;
         String strText       = null ;
+        dict.put("Path", this.m_strPath) ;
         for (Object element : lRegions) {
             strRegionName = (String)element;
             strText = this.getTextForRegion(strRegionName);

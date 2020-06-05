@@ -5,11 +5,11 @@
 package hcc_pdfWndExtractor2020;
 
 import hcc_abstract.pdfBox;
-import java.awt.geom.Rectangle2D;
+import hcc_search.hcc_utils;
+import java.io.File;
+import java.io.IOException;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 /**
  *
  * @author frank
@@ -30,13 +30,23 @@ class Rect{
     }
 }
 
-class clsDocRegions{
+interface IDocRegions{
+    public int createRegions(String strFilename, int iPageNum) throws Exception;
+    public boolean serialize(String strPath, String strFilename,  String strContent) throws IOException;
+    public boolean process();
+     public Hashtable getTexts() ;
+}
+
+class clsDocRegions implements IDocRegions{
     public hcc_abstract.pdfBox m_pdf = null ;
+    
     
     public clsDocRegions(){
         
     }
-   
+    public Hashtable getTexts(){
+        return null ;
+    }
     public boolean process(){
         return this.m_pdf.extractRegions() ;
     }
@@ -50,9 +60,20 @@ class clsDocRegions{
                         ));
         return 0;
     } ;
+    
+    public int createRegions(String strFilename, int iPageNum) throws Exception{
+        return 0 ;
+    }
+    
+    public boolean serialize(String strPath, String strFilename,  String strContent) throws IOException {
+        if( false == hcc_utils.checkPath(strPath)){
+            throw new IOException("Directory ["  + strPath + "] is not accessible") ;
+        }
+        return hcc_utils.writeFile(strPath + File.separator + strFilename + ".json", strContent) ;
+    }
 }
 
-class InvoiceRegionsDE extends clsDocRegions{
+class InvoiceRegionsDE extends clsDocRegions  implements IDocRegions{
     
     public InvoiceRegionsDE(){        
         
@@ -131,8 +152,13 @@ class InvoiceRegionsDE extends clsDocRegions{
         return this.m_pdf.getTexts() ;
     }
     
-    public int createRegions(String strFilename, int iPageNum){
-        this.m_pdf = new pdfBox(strFilename, 0, 2) ;        
+    public int createRegions(String strFilename, int iPageNum) throws Exception{
+        try{
+            this.m_pdf = new pdfBox(strFilename, 0, 2) ;        
+        }catch(Exception ex){
+            throw(ex) ;
+        }
+        
         
         int iWidth = 0 ;
         int iHeight = 0 ;
@@ -206,6 +232,7 @@ class VBAuszugRegionsH{
 public class clsRegions {
     protected float m_fDocWidth ;
     protected float m_fDocHeight ;
+    public static final int RTYPE_INVOICE = 1 ;
     
     public clsRegions(float fDocWidth, float fDocHeight){
         this.m_fDocWidth  = fDocWidth ;

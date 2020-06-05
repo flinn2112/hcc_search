@@ -5,6 +5,7 @@
  */
 package hcc_search.testFrames;
 
+import hccAI.clsPostAI;
 import hcc_miners.NamedEntityParserTest;
 import hcc_pdfWndExtractor2020.pdfWndExtractor;
 import java.util.regex.Matcher;
@@ -25,6 +26,8 @@ public class hccAI2021 {
         // TODO code application logic here
         Pattern p = null ; //
         Matcher m = null ;
+        //clsPostAI pai = new clsPostAI("http", "allis1.com", 80, "/2020postback.php") ;
+        //pai.post("http://hcc-medical.com/2020postback.php", "x=y,1=2") ;
         //nur ein Experiment mit Tika NER - fruchtlos
         /*
         NamedEntityParserTest ner = new NamedEntityParserTest() ;
@@ -55,12 +58,13 @@ public class hccAI2021 {
                 iRet++ ;
             }
         */
-        
+        System.out.println("Working Directory = " +
+              System.getProperty("user.dir"));
         pdfWndExtractor pWE = null ;
         pWE = new pdfWndExtractor() ;
         //pWE.extractTest("x:\\tmp\\83275707_2020_Nr.004_Kontoauszug_vom_30.04.2020_20200509031949.pdf") ; //nur Test
         //pWE.extractTest("x:\\tmp\\14052020_BRN3C2AF4ADF55B_20200514_064614_001466.pdf") ; //nur Test Kassenbeleg
         //pWE.extractTestAddress("x:\\tmp\\290322020_BRN3C2AF4ADF55B_20200316_105748_001138.pdf"); // Test Address
-        pWE.extractTestInvoice("x:\\tmp\\07082011162135817_min.pdf"); // Invoice hcc
+        pWE.extractRegions("x:\\tmp\\07082011162135817_min.pdf"); // Invoice hcc
     }    
 }

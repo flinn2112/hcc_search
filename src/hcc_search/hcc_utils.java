@@ -13,15 +13,14 @@ import java.net.*;
 import java.io.BufferedReader;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
-import javax.management.* ;
 
 import java.nio.* ;
 import java.nio.channels.FileChannel ;
 import java.nio.channels.FileChannel.MapMode; 
+import java.security.MessageDigest;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.zip.Adler32;
@@ -44,8 +43,33 @@ public class hcc_utils {
      DateFormat dataformat =  DateFormat.getDateInstance(DateFormat.LONG);
      return dataformat.format(f.lastModified()); 
   } 
+  //primitive: check Filename for .pdf
+    public static boolean isPDF(String strFilename){
+        //a very quick solution - should be enhanced
+        return strFilename.endsWith(".pdf") ;
+    }
   
-  
+    public static String base64encode(String strIn){
+        String strRet = null ;
+        try{
+            strRet =  Base64.getUrlEncoder().encodeToString(
+                strIn.getBytes("utf-8"));
+        }catch(Exception ex){
+        
+        }
+        return strRet ;
+    }
+    public static String getSHA256(String strIn) throws Exception{
+        byte[] digest = null ;
+        try{
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            digest = messageDigest.digest(strIn.getBytes());
+        }catch(Exception ex){
+            throw(ex) ;
+        }
+        return digest.toString() ;
+    }
+    
   public static String getTimestampString(long lTime) {
      DateFormat dataformat =  DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM  );
      
@@ -433,13 +457,14 @@ public class hcc_utils {
       
       //!CHECK PATH (later)
       File file = new File(strPath);
+      System.out.println(file.getAbsolutePath());
       try{
-      output = new BufferedWriter(new FileWriter(file));
-      output.write(strContent);
-      output.close();
-      bRet = true ;
+        output = new BufferedWriter(new FileWriter(file));
+        output.write(strContent);
+        output.close();
+        bRet = true ;
       }catch( IOException ex){
-          
+          bRet = false ;
       }
       return bRet ;
   }
